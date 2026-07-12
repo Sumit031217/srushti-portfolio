@@ -4,17 +4,24 @@
   --font-poppins: 'Poppins', sans-serif;
   --font-montserrat: 'Montserrat', sans-serif;
   
-  /* Custom Elegant Editorial Palette */
-  --color-brand-blue: #1e293b;
-  --color-brand-accent-blue: #2563eb;
-  --color-brand-green: #15803d;
-  --color-brand-bg: #f8fafc;
+  /* RocketGX Inspired White & Purple Theme */
+  --color-brand-blue: #0f172a; /* Deep Slate for text */
+  --color-brand-accent-blue: #7c3aed; /* Vibrant Tech Purple */
+  --color-brand-green: #6d28d9; /* Deep Purple */
+  --color-brand-bg: #ffffff; /* Pure White */
 }
 
+/* Hide default cursor to use our custom one */
 body {
   background-color: var(--color-brand-bg);
   color: var(--color-brand-blue);
   font-family: var(--font-montserrat);
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  cursor: none; 
+}
+
+/* Ensure links also hide default cursor so ours shows */
+a, button, [role="button"] {
+  cursor: none;
 }

@@ -174,10 +174,32 @@ const CaseStudy = () => {
         </div>
 
         {/* Reflection */}
-        <div className="bg-brand-blue text-white p-8 md:p-12 rounded-sm shadow-xl">
-          <h3 className="font-poppins text-2xl font-bold mb-4 text-[#ccff00]">Reflection</h3>
+        <div className="bg-brand-blue text-white p-8 md:p-12 rounded-xl shadow-xl border border-slate-800">
+          <h3 className="font-poppins text-2xl font-bold mb-4 text-brand-accent-blue">Reflection</h3>
           <p className="font-montserrat font-light leading-relaxed text-slate-300">{project.reflection}</p>
         </div>
+      </div>
+
+      {/* INNER NAVIGATION (Next Project) */}
+      <div className="animate-up mt-24 pt-12 border-t border-slate-200 flex justify-between items-center">
+        <Link to="/work" className="font-mono text-xs uppercase font-bold tracking-wider text-slate-500 hover:text-brand-accent-blue transition-colors">
+          &larr; All Work
+        </Link>
+        {id === 'scottish-widows' && (
+          <Link to="/case-study/sweet-lies" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right">
+            Next: Sweet Lies &rarr;
+          </Link>
+        )}
+        {id === 'sweet-lies' && (
+          <Link to="/case-study/inforens" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right">
+            Next: Inforens &rarr;
+          </Link>
+        )}
+        {id === 'inforens' && (
+          <Link to="/case-study/scottish-widows" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right">
+            Next: Scottish Widows &rarr;
+          </Link>
+        )}
       </div>
     </div>
   );
