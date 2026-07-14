@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,14 +17,13 @@ const projectData = {
       "Client: Lloyds Banking Group / Scottish Widows",
       "Duration: Academic term project",
       "Team: Group project",
-      "Role: Collaborative work across research, interviews, synthesis, opportunity framing, and prototype development, with a particularly strong contribution in idea generation and creative thinking",
-      "Focus: Income protection service journey",
-      "Core methods: Public interviews, surveys, desk research, journey mapping, stakeholder mapping, service blueprinting, prototyping"
+      "Role: Service Designer",
+      "Focus: Income protection service journey"
     ],
-    image1: { text: "[ Polished project cover image with refined title layout, subtle financial interface crop, and one simple journey line or flow graphic. ]", caption: "A service design project focused on making income protection feel clearer, more relevant, and easier to trust." },
+    image1: { text: "[ Polished project cover image ]", caption: "A service design project focused on making income protection feel clearer, more relevant, and easier to trust." },
     brief: "The project began with a broad question around protection, but it quickly became clear that income protection carried a particular kind of tension. For many people, it sat somewhere between something important and something they had never fully seen themselves needing. The challenge was to understand what created that distance, what emotional and practical barriers shaped people’s responses, and how the experience could feel more supportive from the very beginning.",
-    image2: { text: "[ Decision visual showing all protection categories explored first, then the narrowing into income protection, with reasons for choosing it. ]", microcopy: ["Starting point: Wider protection landscape", "Focus area: Income protection", "Why this area mattered most"], caption: "We began broadly, then narrowed our focus to the area that felt most relevant, emotionally loaded, and in need of clearer communication." },
-    approach: "This was a fully collaborative group project, so the work moved across the whole process together rather than through fixed individual roles. We used exploratory design methods to understand the space first, then gradually built a clearer direction through research, mapping, synthesis, and prototyping. My role was especially strong in the idea generation stage, where I helped shape how insights could turn into more thoughtful and engaging service directions.",
+    image2: { text: "[ Decision visual showing all protection categories ]", microcopy: ["Starting point", "Focus area", "Why it mattered"], caption: "We began broadly, then narrowed our focus to the area that felt most relevant." },
+    approach: "This was a fully collaborative group project, so the work moved across the whole process together rather than through fixed individual roles. We used exploratory design methods to understand the space first, then gradually built a clearer direction through research, mapping, synthesis, and prototyping.",
     approachBullets: [
       "Explored the wider protection landscape before narrowing the focus.",
       "Conducted public interviews, desk research, and digital surveys.",
@@ -32,13 +31,13 @@ const projectData = {
       "Synthesised findings into patterns, themes, and opportunity areas.",
       "Translated insights into a redesigned website journey prototype."
     ],
-    image3: { text: "[ Process collage with interview notes, survey snapshots, stakeholder map, and journey map or blueprint. ]", microcopy: ["Interviews", "Survey patterns", "Stakeholder landscape", "Service journey"], caption: "The research helped us move from a broad financial topic to a much more human understanding of hesitation, relevance, and trust." },
+    image3: { text: "[ Process collage ]", microcopy: ["Interviews", "Survey patterns", "Stakeholder landscape"], caption: "The research helped us move from a broad financial topic to a much more human understanding." },
     insights: [
       "Many people did not reject income protection. They simply did not see themselves in it.",
       "Trust was shaped as much by tone and framing as by information.",
       "In financial conversations, pauses and discomfort often revealed as much as direct answers."
     ],
-    image4: { text: "[ One clean journey map or service blueprint with highlighted friction points. ]", caption: "Journey mapping and blueprinting helped us see where confusion, hesitation, and trust gaps were shaping the experience." },
+    image4: { text: "[ Clean journey map ]", caption: "Journey mapping helped us see where confusion and trust gaps were shaping the experience." },
     output: "The final output moved beyond insight gathering into a clearer service direction and a more human-facing prototype. Rather than simply explaining income protection better, the work aimed to make the experience feel easier to recognise, easier to trust, and easier to move through.",
     outputBullets: [
       "Research synthesis",
@@ -48,17 +47,17 @@ const projectData = {
       "Service blueprint and journey framework",
       "Redesigned website journey prototype"
     ],
-    image5: { text: "[ High-quality still from the website journey prototype showing a clearer onboarding, explanation, or decision-support moment. ]", microcopy: ["Prototype still", "Redesigned journey", "Clarity before commitment"], caption: "The prototype translated research into a clearer website journey that focused on relevance, support, and trust at key decision points." },
-    outcome: "The project reframed income protection as more than a communication problem. It showed that the experience depends on whether people can recognise their own lives in the service, feel emotionally understood, and trust what they are being asked to consider. It also showed how financial wellbeing can be designed with more care when clarity and empathy are treated as part of the service itself.",
+    image5: { text: "[ High-quality prototype still ]", microcopy: ["Redesigned journey", "Clarity before commitment"], caption: "The prototype translated research into a clearer website journey." },
+    outcome: "The project reframed income protection as more than a communication problem. It showed that the experience depends on whether people can recognise their own lives in the service, feel emotionally understood, and trust what they are being asked to consider.",
     outcomeBullets: [
-      "Individual: Made the service feel easier to understand, relate to, and act on.",
-      "Organisation: Highlighted where communication and experience design could better build trust.",
-      "Wider impact: Opened a more accessible way of thinking about financial protection and vulnerability."
+      "Individual: Made the service feel easier to understand and act on.",
+      "Organisation: Highlighted where communication could better build trust.",
+      "Wider impact: Opened a more accessible way of thinking about financial protection."
     ],
-    image6: { text: "[ 3-column impact graphic with Individual, Organisation, and Wider impact. ]", caption: "The project was considered through the value it could create for people, organisations, and the wider social context." },
-    challenges: "This project came with two major constraints. The first was time. Because it was a live group project, we could not speak to as many users as we would have liked, which meant each conversation needed to be approached with care and used thoughtfully. The second was the sensitivity of the topic itself. Conversations around income, instability, and protection required a more careful and trauma-aware way of listening, so it became important to notice not only what people said, but how they said it, where they paused, and what felt difficult to name directly.",
-    image7: { text: "[ Clean split visual or two small cards showing time limitation and sensitive-topic interviewing. ]", microcopy: ["Limited access, deeper listening", "Sensitive topic, careful framing"], caption: "The constraints shaped not only the pace of the project, but also the care needed in how the research was carried out." },
-    reflections: "This project taught me that interviews are not only about collecting answers. They are about learning how to listen properly. Often, what matters most sits in a pause, a hesitation, or a moment of discomfort. It also deepened my understanding of how important the right question is. Better questions create better insights, and peer reviews helped us keep widening our perspective rather than becoming too attached to one reading of the problem.",
+    image6: { text: "[ 3-column impact graphic ]", caption: "The project was considered through the value it could create for people and organisations." },
+    challenges: "This project came with two major constraints. The first was time. Because it was a live group project, we could not speak to as many users as we would have liked. The second was the sensitivity of the topic itself. Conversations around income and instability required a more careful and trauma-aware way of listening.",
+    image7: { text: "[ Clean split visual ]", microcopy: ["Limited access", "Sensitive topic"], caption: "The constraints shaped not only the pace, but the care needed in research." },
+    reflections: "This project taught me that interviews are not only about collecting answers. They are about learning how to listen properly. Often, what matters most sits in a pause, a hesitation, or a moment of discomfort.",
     reflectionCards: [
       "How someone speaks can reveal as much as what they say.",
       "The quality of a question shapes the quality of an insight.",
@@ -75,14 +74,13 @@ const projectData = {
       "Partners: Mackintosh at the Willow / National Trust for Scotland",
       "Duration: Five-week project",
       "Audience: Learners aged 13 to 16",
-      "Role: Collaborative work across research, concepting, writing, editing, and prototyping, with a particularly strong role in content and storytelling",
-      "Deliverable: Eight-page educational newspaper prototype",
-      "Core methods: Stakeholder listening, concept testing, editorial structuring, content writing, prototyping"
+      "Role: Service Designer",
+      "Deliverable: Eight-page educational newspaper prototype"
     ],
     image1: { text: "[ Newspaper cover or strongest opening spread. ]", caption: "An editorial learning experience designed to hold difficult history with honesty, structure, and care." },
     brief: "The brief was to create a learning resource around Scottish afternoon tea for young learners, with a focus on historical power and empire. What sounded simple at first quickly opened into something much larger. The challenge was to communicate a deeply sensitive history in a way that respected young audiences, worked in real classrooms, and remained accessible to different learner needs without reducing the depth of the subject.",
-    image2: { text: "[ Visual showing the biscuit and the wider systems behind it, including countries, routes, labour, trade, and identity. ]", microcopy: ["One biscuit", "Six countries", "Centuries of exploitation"], caption: "What first looked like a simple object quickly opened into a much wider story of labour, trade, empire, and identity." },
-    approach: "This project was shaped through stakeholder listening, concept testing, editorial decision-making, and repeated simplification. Because we could not speak directly with the end users due to ethical constraints, we relied on expert input, student reactions to existing learning formats, and careful judgment throughout the process. My communication background became especially useful here, as I helped shape how the language could stay clear, age-appropriate, and emotionally careful without losing honesty.",
+    image2: { text: "[ Visual showing the biscuit and the wider systems behind it ]", microcopy: ["One biscuit", "Six countries", "Centuries of exploitation"], caption: "What first looked like a simple object quickly opened into a much wider story of labour, trade, empire, and identity." },
+    approach: "This project was shaped through stakeholder listening, concept testing, editorial decision-making, and repeated simplification. Because we could not speak directly with the end users due to ethical constraints, we relied on expert input, student reactions to existing learning formats, and careful judgment throughout the process.",
     approachBullets: [
       "Conducted site visits and listened to stakeholder presentations.",
       "Gathered input on accessibility, curriculum, hospitality, and food heritage.",
@@ -97,8 +95,8 @@ const projectData = {
       "Format should support learning, not overpower it.",
       "Accessibility had to shape the resource from the beginning, not the final polish."
     ],
-    image4: { text: "[ Concept rejection board showing workshop, roleplay, game, timeline, and sensory interaction. ]", caption: "Some of the strongest decisions in the project came from the ideas we chose not to pursue." },
-    output: "The final output was an eight-page educational newspaper where every element was deliberately structured, edited, and reviewed several times. The wording, pacing, and sequencing were shaped carefully so the experience could stay clear, sensitive, and educational without losing depth. More than a format choice, the newspaper became a way of holding complexity in a form that felt grounded and usable.",
+    image4: { text: "[ Concept rejection board ]", caption: "Some of the strongest decisions in the project came from the ideas we chose not to pursue." },
+    output: "The final output was an eight-page educational newspaper where every element was deliberately structured, edited, and reviewed several times. The wording, pacing, and sequencing were shaped carefully so the experience could stay clear, sensitive, and educational without losing depth.",
     outputBullets: [
       "Eight-page newspaper prototype",
       "Narrative structure across the full reading journey",
@@ -106,18 +104,17 @@ const projectData = {
       "Reflection prompts and learning cues",
       "A format designed for real classroom use"
     ],
-    image5: { text: "[ Full spread showing 2 inside pages, ideally one with maps and one with text hierarchy. ]", microcopy: ["Chunked learning", "Editorial pacing", "One clear idea per page"], caption: "The newspaper format allowed the content to unfold gradually, helping learners move through a difficult subject with more clarity and confidence." },
-    image6: { text: "[ Detail crop showing content writing, pull quotes, reflection prompts, or a section with strong editorial writing. ]", caption: "The language was shaped with care so the content could stay clear, age-appropriate, and emotionally sensitive without becoming diluted." },
-    outcome: "The project showed that difficult histories can be taught more effectively when the format is simple, content-led, and designed with real access conditions in mind. It also demonstrated how editorial design, storytelling, and accessibility can work together to create a more meaningful learning experience. Rather than making the subject easier by softening it, the project made it more approachable by structuring it with care.",
+    image5: { text: "[ Full spread showing 2 inside pages ]", microcopy: ["Chunked learning", "Editorial pacing", "One clear idea per page"], caption: "The newspaper format allowed the content to unfold gradually, helping learners move through a difficult subject with more clarity and confidence." },
+    outcome: "The project showed that difficult histories can be taught more effectively when the format is simple, content-led, and designed with real access conditions in mind. It also demonstrated how editorial design, storytelling, and accessibility can work together to create a more meaningful learning experience.",
     outcomeBullets: [
       "A format that could work within one class period.",
       "A resource that did not rely on expensive tools or complex setup.",
       "A more respectful and accessible way of engaging with colonial history."
     ],
+    image6: { text: "[ Detail crop showing content writing, pull quotes, or reflection prompts ]", caption: "The language was shaped with care so the content could stay clear, age-appropriate, and emotionally sensitive without becoming diluted." },
+    challenges: "This project had several important constraints. We could not speak directly to the end users because of ethical concerns and the sensitivity of the subject, so we had to build the work through stakeholder insight, secondary feedback, and careful interpretation. Time and budget shaped every decision too.",
     image7: { text: "[ Simple visual block showing Accessible, Printable, Classroom-ready, and Content-led. ]", caption: "The final format worked because it respected both the sensitivity of the topic and the realities of classroom use." },
-    challenges: "This project had several important constraints. We could not speak directly to the end users because of ethical concerns and the sensitivity of the subject, so we had to build the work through stakeholder insight, secondary feedback, and careful interpretation. Time and budget shaped every decision too. The resource needed to work in real classrooms, often within a single lesson and without relying on technology-heavy formats. Another challenge was letting go of ideas that looked exciting on paper but were not actually helping students engage with the history in the way the brief required.",
-    image8: { text: "[ Three-card constraint visual showing ethical limits, tight timeline, and zero-budget classroom reality. ]", caption: "The strongest solution came from designing within the real limits of access, ethics, and classroom use." },
-    reflections: "This project taught me that simplicity does not mean losing depth. Sometimes the most respectful design choice is the one that removes spectacle and lets the content do the work. It also made me more aware of how budget, ethics, time, and accessibility shape what good design really looks like in practice. Peer reviews and group discussions kept widening our perspective, helping us understand how the same topic can carry different emotional, educational, and cultural meanings depending on who is reading it.",
+    reflections: "This project taught me that simplicity does not mean losing depth. Sometimes the most respectful design choice is the one that removes spectacle and lets the content do the work. It also made me more aware of how budget, ethics, time, and accessibility shape what good design really looks like in practice.",
     reflectionCards: [
       "Content-led experiences can be more powerful than highly interactive ones.",
       "Budget and access shape design just as much as creativity does.",
@@ -128,20 +125,19 @@ const projectData = {
     title: "Inforens",
     tag: "UX Strategy / Service Design / Internship Project",
     heroSubtitle: "Making a student platform feel clearer, more trustworthy, and more human across website, rewards, and journey design.",
-    heroCopy: "At Inforens, I worked across a live team environment with designers, founders, and developers to improve how the platform communicated value and supported international students across different stages of their journey. My work spanned website experience, service clarity, content recommendations, and a mystery reward system, all focused on making the platform feel more trustworthy, visible, and useful to first-time users. What shaped this work most was the realisation that the platform already had strong value. The challenge was helping people actually see it.",
+    heroCopy: "At Inforens, I worked across a live team environment with designers, founders, and developers to improve how the platform communicated value and supported international students across different stages of their journey. My work spanned website experience, service clarity, content recommendations, and a mystery reward system, all focused on making the platform feel more trustworthy, visible, and useful to first-time users.",
     quickFacts: [
       "Project type: Internship project",
       "Organisation: Inforens",
       "Duration: Ongoing internship project",
       "Team: Designers, founders, and developers",
-      "Role: UX thinking, service design, content strategy, structural recommendations, reward logic",
-      "Scope: Website experience, service visibility, and reward system design",
-      "Core methods: Experience audit, service analysis, content strategy, information architecture thinking, reward logic design"
+      "Role: Service Designer",
+      "Scope: Website experience, service visibility, and reward system design"
     ],
-    image1: { text: "[ Polished dark mockup of the Inforens site or one clean screen from the report with a strong title overlay. ]", caption: "A service and UX project focused on turning hidden value into a clearer student-facing experience." },
-    brief: "Inforens already offered strong student value through peer mentorship, post-arrival support, proprietary tools, and structured service bundles, but much of that value was buried or weakly communicated for first-time visitors. The challenge was to make those strengths more visible and shape a clearer experience of trust, progression, and usefulness across the platform. This was not about inventing value from scratch. It was about making what already existed impossible to miss.",
-    image2: { text: "[ Comparison visual showing what Inforens actually offers versus what the website currently communicates. ]", microcopy: ["Strong product", "Weak communication", "Hidden value"], caption: "The gap was not in the service itself, but in how little of its value was visible to a first-time user." },
-    approach: "The work was approached through a first-time-user and service design lens. Rather than treating the platform as a set of isolated screens, I looked at how visibility, structure, trust, and progression worked across the whole experience. This meant focusing not only on pages and content, but on the feeling the service created as someone tried to understand what it offered and whether it was for them.",
+    image1: { text: "[ Polished dark mockup of the Inforens site ]", caption: "A service and UX project focused on turning hidden value into a clearer student-facing experience." },
+    brief: "Inforens already offered strong student value through peer mentorship, post-arrival support, proprietary tools, and structured service bundles, but much of that value was buried or weakly communicated for first-time visitors. The challenge was to make those strengths more visible and shape a clearer experience of trust, progression, and usefulness across the platform.",
+    image2: { text: "[ Comparison visual showing what Inforens actually offers versus website ]", microcopy: ["Strong product", "Weak communication", "Hidden value"], caption: "The gap was not in the service itself, but in how little of its value was visible to a first-time user." },
+    approach: "The work was approached through a first-time-user and service design lens. Rather than treating the platform as a set of isolated screens, I looked at how visibility, structure, trust, and progression worked across the whole experience.",
     approachBullets: [
       "Audited the website experience from a first-time user perspective.",
       "Identified trust, clarity, and navigation gaps.",
@@ -155,7 +151,7 @@ const projectData = {
       "Trust was being weakened by hidden pricing, buried tools, and low visibility of human proof.",
       "Students need to feel the outcome before they fully understand the service."
     ],
-    image4: { text: "[ Homepage recommendation visual showing stronger service promise, visible human proof, clearer post-arrival support, and clearer plan flow. ]", caption: "The recommendations focused on making trust signals and service value visible earlier in the journey." },
+    image4: { text: "[ Homepage recommendation visual ]", caption: "The recommendations focused on making trust signals and service value visible earlier in the journey." },
     output: "The work resulted in a set of connected strategic and UX deliverables designed to improve clarity, visibility, and conversion without losing the student-first quality of the service. Each recommendation aimed to make the platform feel less hidden, less fragmented, and more trustworthy from the first interaction onward.",
     outputBullets: [
       "Website experience report",
@@ -164,19 +160,18 @@ const projectData = {
       "Structural improvements across plans and tools",
       "Four-tier mystery reward system tied to real Inforens services"
     ],
-    image5: { text: "[ Strong report page showing homepage recommendations, pricing flow, post-arrival support, or plans page redesign. ]", microcopy: ["Clear promise", "Visible pricing", "Human proof"], caption: "The recommendations focused on making the service easier to understand before asking users to commit." },
-    image6: { text: "[ Clean reward-system visual showing the four reward tiers or reward logic. ]", caption: "The reward system was designed around real platform services, turning engagement into meaningful value instead of generic offers." },
-    outcome: "The project helped turn hidden platform strengths into clearer user-facing opportunities. It also created a stronger framework for thinking about trust, progression, pricing visibility, and rewards as connected parts of one service experience rather than separate features. More than anything, it showed how much stronger a service can feel when the experience proves its value instead of simply claiming it.",
+    image5: { text: "[ Strong report page showing homepage recommendations ]", microcopy: ["Clear promise", "Visible pricing", "Human proof"], caption: "The recommendations focused on making the service easier to understand before asking users to commit." },
+    outcome: "The project helped turn hidden platform strengths into clearer user-facing opportunities. It also created a stronger framework for thinking about trust, progression, pricing visibility, and rewards as connected parts of one service experience rather than separate features.",
     outcomeBullets: [
-      "clearer communication of student value",
-      "stronger visibility of human proof",
-      "better trust-building before commitment",
-      "more meaningful reward design tied to real services"
+      "Clearer communication of student value",
+      "Stronger visibility of human proof",
+      "Better trust-building before commitment",
+      "More meaningful reward design tied to real services"
     ],
+    image6: { text: "[ Clean reward-system visual showing the four reward tiers ]", caption: "The reward system was designed around real platform services, turning engagement into meaningful value instead of generic offers." },
+    challenges: "One challenge was that the issues were spread across multiple touchpoints rather than sitting inside one isolated feature. That meant the work had to stay strategic and systemic, not only visual. Another challenge was balancing business value with user trust.",
     image7: { text: "[ Simple impact grid showing visibility, trust, progression, and value. ]", caption: "The work focused on making the platform’s strongest qualities easier to see, understand, and act on." },
-    challenges: "One challenge was that the issues were spread across multiple touchpoints rather than sitting inside one isolated feature. That meant the work had to stay strategic and systemic, not only visual. Another challenge was balancing business value with user trust. The recommendations needed to support growth and conversion while still feeling transparent, student-first, and credible.",
-    image8: { text: "[ Simple 2-column visual showing Business needs and User trust, or Surface issue and System issue. ]", caption: "The challenge was not only fixing screens, but aligning business goals with a clearer and more trustworthy student journey." },
-    reflections: "This project taught me that trust is rarely built by one feature alone. It usually comes from the consistency of signals across pricing, structure, language, proof, and visibility. It also reinforced that discovery is increasingly mobile-first for younger audiences, even if later decisions happen elsewhere. People may complete decisions later, but first impressions are often formed quickly through experiences that feel clear, human, and easy to move through.",
+    reflections: "This project taught me that trust is rarely built by one feature alone. It usually comes from the consistency of signals across pricing, structure, language, proof, and visibility. It also reinforced that discovery is increasingly mobile-first for younger audiences, even if later decisions happen elsewhere.",
     reflectionCards: [
       "Trust is cumulative.",
       "Visual memory often works faster than long explanations.",
@@ -187,8 +182,32 @@ const projectData = {
 
 const CaseStudy = () => {
   const { id } = useParams();
-  const project = projectData[id];
+  const project = projectData[id] || projectData["scottish-widows"];
   const pageRef = useRef(null);
+  const [activeSection, setActiveSection] = useState('brief');
+
+  const sections = ['Brief', 'Approach', 'Output', 'Outcome', 'Challenges'];
+
+  // Scroll Spy for Progress Bar
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-30% 0px -70% 0px" } // Triggers when section is near top of screen
+    );
+
+    sections.forEach((sec) => {
+      const el = document.getElementById(sec.toLowerCase());
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [sections]);
 
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
@@ -202,183 +221,190 @@ const CaseStudy = () => {
 
   if (!project) return <div className="p-20 text-center font-mono">Case study not found.</div>;
 
-  // Helper component for UI Note: "Keep captions close to visuals, not detached"
   const ImageBlock = ({ image }) => {
     if (!image) return null;
     return (
       <div className="scroll-fade my-12 group">
-        <div className="w-full aspect-video bg-slate-100 rounded-xl border border-slate-200 flex flex-col items-center justify-center text-slate-400 font-mono text-xs overflow-hidden relative mb-3">
-          <div className="p-6 text-center">{image.text}</div>
-          
-          {/* Helper for UI Note: "Use arrows, sequencing, or small labels" */}
+        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-slate-400 font-mono text-xs overflow-hidden relative mb-4">
+          <div className="p-6 text-center z-10">{image.text}</div>
+          <div className="absolute inset-0 bg-slate-100 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
           {image.microcopy && (
-            <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
+            <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap z-20">
               {image.microcopy.map((label, idx) => (
-                <span key={idx} className="px-3 py-1 bg-white/90 backdrop-blur text-brand-blue text-[10px] font-bold uppercase tracking-widest rounded-sm shadow-sm">
+                <span key={idx} className="px-3 py-1.5 bg-white text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-md border border-slate-100">
                   {label}
                 </span>
               ))}
             </div>
           )}
         </div>
-        <p className="font-montserrat text-sm text-slate-500 font-medium pl-2 border-l-2 border-brand-accent-blue/30">{image.caption}</p>
+        <p className="font-montserrat text-sm text-slate-500 font-medium pl-3 border-l-2 border-brand-accent-blue/30">{image.caption}</p>
       </div>
     );
   };
 
   return (
-    <div ref={pageRef} className="max-w-4xl mx-auto px-6 md:px-12 py-16">
+    <div ref={pageRef} className="pb-24">
       
-      {/* HEADER */}
-      <div className="animate-up mb-16">
-        <span className="inline-block px-3 py-1 bg-brand-accent-blue/10 text-brand-accent-blue text-xs font-mono uppercase tracking-widest font-bold rounded-sm mb-6">
-          {project.tag}
-        </span>
-        <h1 className="font-poppins text-4xl md:text-5xl font-bold tracking-tight text-brand-blue mb-6">
-          {project.title}
-        </h1>
-        <h2 className="font-montserrat text-2xl text-slate-700 font-medium leading-snug mb-8">
-          {project.heroSubtitle}
-        </h2>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-12">
+      {/* STICKY SEGMENTED PROGRESS BAR */}
+      <div className="sticky top-[72px] md:top-[84px] z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm">
+        <div className="max-w-4xl mx-auto flex gap-1 md:gap-2">
+          {sections.map((sec) => (
+            <div 
+              key={sec} 
+              className={`flex-1 h-2 md:h-10 rounded-full md:rounded-lg flex items-center justify-center transition-all duration-500 ${activeSection === sec.toLowerCase() ? 'bg-brand-accent-blue text-white shadow-md shadow-brand-accent-blue/20 scale-105' : 'bg-brand-accent-blue/10 text-brand-accent-blue/70'}`}
+            >
+              <span className="hidden md:block font-poppins text-xs font-bold uppercase tracking-wider">{sec}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 md:px-12 pt-16">
+        
+        {/* HEADER */}
+        <div className="animate-up mb-16 text-center">
+          <span className="inline-block px-4 py-1.5 bg-slate-50 border border-slate-200 text-brand-accent-blue text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-8 shadow-sm">
+            {project.tag}
+          </span>
+          <h1 className="font-poppins text-4xl md:text-6xl font-bold tracking-tight text-brand-blue mb-6 leading-tight">
+            {project.title}
+          </h1>
+          <h2 className="font-montserrat text-xl md:text-2xl text-slate-600 font-medium leading-relaxed max-w-3xl mx-auto mb-10">
+            {project.heroSubtitle}
+          </h2>
+        </div>
+
+        <ImageBlock image={project.image1} />
+
+        {/* HERO COPY - Styled as an intro block */}
+        <div className="animate-up text-lg md:text-xl font-montserrat font-light text-slate-700 leading-relaxed border-l-4 border-brand-accent-blue pl-6 md:pl-10 my-16">
           {project.heroCopy}
-        </p>
-
-        {/* QUICK FACTS CARD */}
-        <div className="bg-slate-50 border border-slate-200 p-8 rounded-xl mb-12">
-          <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.2em] text-brand-accent-blue mb-6">Quick Facts</h3>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 font-montserrat text-sm text-slate-700 font-medium">
-            {project.quickFacts.map((fact, idx) => (
-              <li key={idx} className="flex items-start gap-3">
-                <span className="text-brand-accent-blue mt-1">•</span>
-                {fact}
-              </li>
-            ))}
-          </ul>
         </div>
-      </div>
 
-      <ImageBlock image={project.image1} />
+        {/* QUICK FACTS - EDITORIAL TYPOGRAPHY GRID */}
+        <div className="animate-up mb-24 border-y border-slate-200 py-12">
+          <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 text-center">Project Overview</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
+            {project.quickFacts.map((fact, idx) => {
+              const [key, val] = fact.split(': ');
+              return (
+                <div key={idx} className="flex flex-col">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-brand-accent-blue font-bold mb-2">{key}</span>
+                  <span className="font-montserrat text-sm md:text-base font-medium text-brand-blue leading-snug">{val}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-      {/* BRIEF */}
-      <section className="scroll-fade py-12 border-t border-slate-200">
-        <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6">Brief</h3>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed">{project.brief}</p>
-      </section>
+        {/* BRIEF */}
+        <section id="brief" className="scroll-fade pt-12 pb-8">
+          <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-8">Brief</h3>
+          <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed">{project.brief}</p>
+        </section>
 
-      <ImageBlock image={project.image2} />
+        <ImageBlock image={project.image2} />
 
-      {/* APPROACH */}
-      <section className="scroll-fade py-12 border-t border-slate-200">
-        <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6">Approach</h3>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-8">{project.approach}</p>
-        <ul className="space-y-4 font-montserrat text-slate-600">
-          {project.approachBullets.map((bullet, idx) => (
-            <li key={idx} className="flex items-start gap-3">
-              <span className="w-6 h-6 rounded-full bg-brand-accent-blue/10 text-brand-accent-blue flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{idx + 1}</span>
-              {bullet}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <ImageBlock image={project.image3} />
-
-      {/* INSIGHT CARDS */}
-      <section className="scroll-fade py-12">
-        <h3 className="font-poppins text-sm font-bold uppercase tracking-[0.2em] text-brand-accent-blue mb-6">Key Insights</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {project.insights.map((insight, idx) => (
-            <div key={idx} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm hover:shadow-md hover:border-brand-accent-blue/50 transition-all">
-              <span className="text-4xl font-poppins font-bold text-slate-100 block mb-4">0{idx + 1}</span>
-              <p className="font-montserrat text-sm font-medium text-brand-blue">{insight}</p>
+        {/* APPROACH */}
+        <section id="approach" className="scroll-fade pt-12 pb-8">
+          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-12 mb-12">
+            <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-6">Approach</h3>
+            <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.approach}</p>
+            
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+              <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Process Steps</h4>
+              <ul className="space-y-4 font-montserrat text-slate-700 font-medium text-sm md:text-base">
+                {project.approachBullets.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-4">
+                    <span className="w-6 h-6 rounded-full bg-brand-accent-blue/10 text-brand-accent-blue flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">{idx + 1}</span>
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <ImageBlock image={project.image4} />
+        <ImageBlock image={project.image3} />
 
-      {/* OUTPUT */}
-      <section className="scroll-fade py-12 border-t border-slate-200">
-        <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6">Output</h3>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-8">{project.output}</p>
-        <div className="bg-slate-50 border border-slate-200 p-8 rounded-xl mb-12">
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 font-montserrat text-sm text-slate-700 font-medium">
+        {/* INSIGHT CARDS */}
+        <section className="scroll-fade py-12">
+          <h3 className="font-poppins text-sm font-bold uppercase tracking-[0.2em] text-brand-accent-blue mb-8 text-center">Key Insights</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {project.insights.map((insight, idx) => (
+              <div key={idx} className="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <span className="text-5xl font-poppins font-bold text-slate-100 block mb-6 leading-none">0{idx + 1}</span>
+                <p className="font-montserrat text-sm font-medium text-brand-blue leading-relaxed">{insight}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <ImageBlock image={project.image4} />
+
+        {/* OUTPUT */}
+        <section id="output" className="scroll-fade pt-12 pb-8">
+          <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-6">Output</h3>
+          <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.output}</p>
+          <div className="flex flex-wrap gap-3">
             {project.outputBullets.map((bullet, idx) => (
-              <li key={idx} className="flex items-start gap-3">
-                <span className="text-brand-accent-blue mt-1">→</span>
+              <span key={idx} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs font-mono font-medium text-slate-700">
                 {bullet}
-              </li>
+              </span>
             ))}
-          </ul>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <ImageBlock image={project.image5} />
-      {project.image6 && project.image7 && <ImageBlock image={project.image6} />} {/* For Sweet Lies / Inforens extra images */}
+        <ImageBlock image={project.image5} />
 
-      {/* OUTCOME */}
-      <section className="scroll-fade py-12 border-t border-slate-200">
-        <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6">Outcome</h3>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-8">{project.outcome}</p>
-        <ul className="space-y-4 font-montserrat text-slate-600">
-          {project.outcomeBullets.map((bullet, idx) => (
-            <li key={idx} className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent-blue shrink-0 mt-2"></span>
-              {bullet}
-            </li>
-          ))}
-        </ul>
-      </section>
+        {/* OUTCOME */}
+        <section id="outcome" className="scroll-fade pt-12 pb-8">
+          <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-6">Outcome</h3>
+          <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.outcome}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {project.outcomeBullets.map((bullet, idx) => (
+              <div key={idx} className="flex flex-col gap-3 p-6 bg-slate-50 rounded-xl border border-slate-100">
+                <span className="w-8 h-1 bg-brand-accent-blue rounded-full"></span>
+                <p className="font-montserrat text-sm text-slate-700 font-medium leading-relaxed">{bullet}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+        
+        <ImageBlock image={project.image6} />
 
-      {project.image7 && !project.image8 ? <ImageBlock image={project.image7} /> : null} 
-      {project.image6 && !project.image7 ? <ImageBlock image={project.image6} /> : null}
+        {/* CHALLENGES */}
+        <section id="challenges" className="scroll-fade pt-12 pb-8">
+          <div className="bg-amber-50 border border-amber-100 p-8 md:p-12 rounded-3xl">
+            <h3 className="font-poppins text-3xl font-bold text-amber-900 mb-6 flex items-center gap-3">
+              <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              Challenges
+            </h3>
+            <p className="font-montserrat text-lg font-light text-amber-800 leading-relaxed">{project.challenges}</p>
+          </div>
+        </section>
+        
+        <ImageBlock image={project.image7} />
 
-      {/* CHALLENGES */}
-      <section className="scroll-fade py-12 border-t border-slate-200">
-        <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6">Challenges</h3>
-        <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed">{project.challenges}</p>
-      </section>
+        {/* REFLECTIONS */}
+        <section className="scroll-fade bg-brand-blue text-white p-10 md:p-16 rounded-[2.5rem] mt-16 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent-blue rounded-full blur-[100px] opacity-30 -mr-20 -mt-20 pointer-events-none"></div>
+          
+          <h3 className="font-poppins text-4xl font-bold text-white mb-6 relative z-10">Reflections</h3>
+          <p className="font-montserrat text-lg font-light text-slate-300 leading-relaxed mb-12 max-w-2xl relative z-10">{project.reflections}</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+            {project.reflectionCards.map((card, idx) => (
+              <div key={idx} className="bg-white/5 border border-white/10 backdrop-blur-md p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                <span className="text-xs font-mono text-brand-accent-blue block mb-4 font-bold uppercase tracking-widest">Takeaway 0{idx + 1}</span>
+                <p className="font-montserrat text-sm font-medium text-slate-100 leading-relaxed">{card}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {project.image8 ? <ImageBlock image={project.image8} /> : (project.image7 && project.image8 ? <ImageBlock image={project.image7} /> : null)}
-
-      {/* REFLECTIONS */}
-      <section className="scroll-fade py-12 border-t border-slate-200 bg-brand-blue text-white p-8 md:p-12 rounded-2xl mt-12">
-        <h3 className="font-poppins text-3xl font-bold text-white mb-6">Reflections</h3>
-        <p className="font-montserrat text-lg font-light text-slate-300 leading-relaxed mb-10">{project.reflections}</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {project.reflectionCards.map((card, idx) => (
-            <div key={idx} className="bg-slate-800/50 border border-slate-700 p-6 rounded-xl">
-              <span className="text-xs font-mono text-brand-accent-blue block mb-3 font-bold uppercase tracking-widest">Takeaway 0{idx + 1}</span>
-              <p className="font-montserrat text-sm font-medium text-slate-200">{card}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* INNER NAVIGATION (Next Project) */}
-      <div className="scroll-fade mt-24 pt-12 border-t border-slate-200 flex justify-between items-center">
-        <Link to="/work" className="font-mono text-xs uppercase font-bold tracking-wider text-slate-500 hover:text-brand-accent-blue transition-colors cursor-none">
-          &larr; All Work
-        </Link>
-        {id === 'scottish-widows' && (
-          <Link to="/case-study/sweet-lies" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right cursor-none">
-            Next: Sweet Lies &rarr;
-          </Link>
-        )}
-        {id === 'sweet-lies' && (
-          <Link to="/case-study/inforens" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right cursor-none">
-            Next: Inforens &rarr;
-          </Link>
-        )}
-        {id === 'inforens' && (
-          <Link to="/case-study/scottish-widows" className="font-mono text-xs uppercase font-bold tracking-wider text-brand-accent-blue hover:text-brand-blue transition-colors text-right cursor-none">
-            Next: Scottish Widows &rarr;
-          </Link>
-        )}
       </div>
-
     </div>
   );
 };
