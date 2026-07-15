@@ -3,6 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// IMPORT ALL 8 NEWSPAPER PNGs HERE
+import news1 from '../assets/news-1.png';
+import news2 from '../assets/news-2.png';
+import news3 from '../assets/news-3.png';
+import news4 from '../assets/news-4.png';
+import news5 from '../assets/news-5.png';
+import news6 from '../assets/news-6.png';
+import news7 from '../assets/news-7.png';
+import news8 from '../assets/news-8.png';
+ 
+
 gsap.registerPlugin(ScrollTrigger);
 
 // --- FULL PROJECT DATA ENGINE ---
@@ -61,7 +72,8 @@ const projectData = {
     reflectionCards: [
       "How someone speaks can reveal as much as what they say.",
       "The quality of a question shapes the quality of an insight.",
-      "A service becomes stronger when it is viewed from multiple perspectives."
+      "A service becomes stronger when it is viewed from multiple perspectives.",
+      "Visuals need to explain the idea, not just decorate the page."
     ]
   },
   "sweet-lies": {
@@ -104,7 +116,13 @@ const projectData = {
       "Reflection prompts and learning cues",
       "A format designed for real classroom use"
     ],
-    image5: { text: "[ Full spread showing 2 inside pages ]", microcopy: ["Chunked learning", "Editorial pacing", "One clear idea per page"], caption: "The newspaper format allowed the content to unfold gradually, helping learners move through a difficult subject with more clarity and confidence." },
+    image5: { 
+      type: "newspaper", 
+      srcs: [news1, news2, news3, news4, news5, news6, news7, news8], 
+      text: "[ Newspaper Viewer Loaded ]", 
+      microcopy: ["Chunked learning", "Editorial pacing", "One clear idea per page"], 
+      caption: "The newspaper format allowed the content to unfold gradually, helping learners move through a difficult subject with more clarity and confidence." 
+    },
     outcome: "The project showed that difficult histories can be taught more effectively when the format is simple, content-led, and designed with real access conditions in mind. It also demonstrated how editorial design, storytelling, and accessibility can work together to create a more meaningful learning experience.",
     outcomeBullets: [
       "A format that could work within one class period.",
@@ -180,6 +198,115 @@ const projectData = {
   }
 };
 
+// --- CUSTOM INTERACTIVE NEWSPAPER COMPONENT ---
+const InteractiveFlipbook = ({ srcs, caption, microcopy }) => {
+  const [activePage, setActivePage] = useState(0);
+
+  const goToNext = (e) => {
+    e.stopPropagation();
+    if (activePage < srcs.length - 1) setActivePage(p => p + 1);
+  };
+
+  const goToPrev = (e) => {
+    e.stopPropagation();
+    if (activePage > 0) setActivePage(p => p - 1);
+  };
+
+  return (
+    <div className="scroll-fade my-16 w-full flex flex-col group cursor-none">
+      
+      {/* Viewer Desk Area - Changed to a tall, vertical container for a much closer view! */}
+      <div 
+        className="relative w-full h-[75vh] min-h-[600px] max-h-[900px] bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 cursor-pointer transition-colors hover:bg-[#f1f1eb]" 
+        onClick={goToNext}
+      >
+        
+        {/* Subtle Desk Texture */}
+        <div className="absolute inset-0 opacity-30 mix-blend-multiply pointer-events-none" style={{ backgroundImage: 'radial-gradient(#94a3b8 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
+
+        {/* Stack Container - Made drastically larger. Now it scales based on height to fill the screen! */}
+        <div className="relative h-[90%] md:h-[100%] aspect-[7/10] perspective-[3000px]">
+          {srcs.map((src, index) => {
+            const isTurned = index < activePage;
+            const isActive = index === activePage;
+            const isWaiting = index > activePage;
+
+            const zIndex = srcs.length - index;
+            // Spread offset adjusted for the larger page size
+            const offset = isWaiting ? (index - activePage) * 6 : 0; 
+            // Turn the page to the left
+            const rotateY = isTurned ? -110 : 0; 
+            const opacity = isTurned ? 0 : 1;
+
+            return (
+              <div
+                key={index}
+                className="absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                style={{
+                  zIndex,
+                  opacity,
+                  transformOrigin: 'left center',
+                  transform: `rotateY(${rotateY}deg) translateX(${offset}px) translateY(${offset}px)`,
+                  pointerEvents: isActive ? 'auto' : 'none'
+                }}
+              >
+                {/* Individual Page Styles - Now massive and readable */}
+                <div className="w-full h-full relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-slate-200 flex flex-col overflow-hidden rounded-r-md">
+                  {/* Spine shadow for realism */}
+                  <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/10 to-transparent z-10 pointer-events-none"></div>
+                  
+                  <img src={src} alt={`Newspaper Page ${index + 1}`} className="w-full h-full object-contain bg-white" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Hover Hint on the Right Side */}
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none hidden md:flex">
+          {activePage < srcs.length - 1 && (
+            <span className="bg-brand-blue text-white text-[10px] uppercase tracking-widest px-4 py-2 rounded-full font-bold shadow-xl flex items-center gap-2">
+              Click to flip <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Interactive Controls Bar */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-6">
+        
+        {microcopy && (
+          <div className="flex gap-2 flex-wrap order-2 md:order-1">
+            {microcopy.map((label, idx) => (
+              <span key={idx} className="px-3 py-1.5 bg-slate-50 text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-sm border border-slate-200">
+                {label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Page Nav Buttons */}
+        <div className="flex items-center gap-6 order-1 md:order-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+          <button onClick={goToPrev} disabled={activePage === 0} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${activePage === 0 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+
+          <span className="font-mono text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+            Page {activePage + 1} of {srcs.length}
+          </span>
+
+          <button onClick={goToNext} disabled={activePage === srcs.length - 1} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${activePage === srcs.length - 1 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+      
+      <p className="font-montserrat text-sm text-slate-500 font-medium pl-3 border-l-2 border-brand-accent-blue/30 mt-6 self-start">{caption}</p>
+    </div>
+  );
+};
+
+
 const CaseStudy = () => {
   const { id } = useParams();
   const project = projectData[id] || projectData["scottish-widows"];
@@ -187,6 +314,23 @@ const CaseStudy = () => {
   const [activeSection, setActiveSection] = useState('brief');
 
   const sections = ['Brief', 'Approach', 'Output', 'Outcome', 'Challenges'];
+
+  // Scroll logic for the clickable sticky nav
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId.toLowerCase());
+    if (element) {
+      const offset = 140; 
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Scroll Spy for Progress Bar
   useEffect(() => {
@@ -198,7 +342,7 @@ const CaseStudy = () => {
           }
         });
       },
-      { rootMargin: "-30% 0px -70% 0px" } // Triggers when section is near top of screen
+      { rootMargin: "-30% 0px -70% 0px" } 
     );
 
     sections.forEach((sec) => {
@@ -221,13 +365,27 @@ const CaseStudy = () => {
 
   if (!project) return <div className="p-20 text-center font-mono">Case study not found.</div>;
 
+  // Standard Image Block
   const ImageBlock = ({ image }) => {
     if (!image) return null;
+
+    // Checks if the image object requires the Newspaper Flipbook layout
+    if (image.type === 'newspaper') {
+      return <InteractiveFlipbook srcs={image.srcs} caption={image.caption} microcopy={image.microcopy} />;
+    }
+
     return (
       <div className="scroll-fade my-12 group">
-        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-slate-400 font-mono text-xs overflow-hidden relative mb-4">
-          <div className="p-6 text-center z-10">{image.text}</div>
+        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
+          
+          {image.src ? (
+            <img src={image.src} alt={image.text} className="w-full h-full object-contain p-4 z-10" />
+          ) : (
+            <div className="p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
+          )}
+          
           <div className="absolute inset-0 bg-slate-100 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+          
           {image.microcopy && (
             <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap z-20">
               {image.microcopy.map((label, idx) => (
@@ -243,19 +401,24 @@ const CaseStudy = () => {
     );
   };
 
+  const reflectionGridClass = project.reflectionCards.length === 4 
+    ? 'grid-cols-1 md:grid-cols-2' 
+    : 'grid-cols-1 md:grid-cols-3';
+
   return (
     <div ref={pageRef} className="pb-24">
       
-      {/* STICKY SEGMENTED PROGRESS BAR */}
-      <div className="sticky top-[72px] md:top-[84px] z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm">
+      {/* STICKY SEGMENTED PROGRESS BAR - Gap Fixed */}
+      <div className="sticky top-[60px] md:top-[64px] lg:top-[72px] z-40 bg-white border-b border-slate-200 py-3 px-6 shadow-sm">
         <div className="max-w-4xl mx-auto flex gap-1 md:gap-2">
           {sections.map((sec) => (
-            <div 
+            <button 
               key={sec} 
-              className={`flex-1 h-2 md:h-10 rounded-full md:rounded-lg flex items-center justify-center transition-all duration-500 ${activeSection === sec.toLowerCase() ? 'bg-brand-accent-blue text-white shadow-md shadow-brand-accent-blue/20 scale-105' : 'bg-brand-accent-blue/10 text-brand-accent-blue/70'}`}
+              onClick={() => scrollToSection(sec)}
+              className={`flex-1 h-2 md:h-10 rounded-full md:rounded-lg flex items-center justify-center transition-all duration-500 cursor-none ${activeSection === sec.toLowerCase() ? 'bg-brand-accent-blue text-white shadow-md shadow-brand-accent-blue/20 scale-105' : 'bg-brand-accent-blue/10 text-brand-accent-blue/70 hover:bg-brand-accent-blue/20'}`}
             >
               <span className="hidden md:block font-poppins text-xs font-bold uppercase tracking-wider">{sec}</span>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -394,7 +557,7 @@ const CaseStudy = () => {
           <h3 className="font-poppins text-4xl font-bold text-white mb-6 relative z-10">Reflections</h3>
           <p className="font-montserrat text-lg font-light text-slate-300 leading-relaxed mb-12 max-w-2xl relative z-10">{project.reflections}</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          <div className={`grid ${reflectionGridClass} gap-6 relative z-10`}>
             {project.reflectionCards.map((card, idx) => (
               <div key={idx} className="bg-white/5 border border-white/10 backdrop-blur-md p-8 rounded-2xl hover:bg-white/10 transition-colors">
                 <span className="text-xs font-mono text-brand-accent-blue block mb-4 font-bold uppercase tracking-widest">Takeaway 0{idx + 1}</span>
