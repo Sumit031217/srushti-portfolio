@@ -408,8 +408,8 @@ const CaseStudy = () => {
   return (
     <div ref={pageRef} className="pb-24">
       
-      {/* STICKY SEGMENTED PROGRESS BAR - Gap Fixed */}
-      <div className="sticky top-[60px] md:top-[64px] lg:top-[72px] z-40 bg-white border-b border-slate-200 py-3 px-6 shadow-sm">
+      {/* STICKY SEGMENTED PROGRESS BAR - Tighter Gap */}
+      <div className="sticky top-[48px] md:top-[56px] lg:top-[60px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm">
         <div className="max-w-4xl mx-auto flex gap-1 md:gap-2">
           {sections.map((sec) => (
             <button 
