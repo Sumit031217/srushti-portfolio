@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Make sure these match your actual file extensions (.png or .jpg) in the assets folder!
+import inforensCover from '../assets/inforens-cover.png'; 
+import widowsCover from '../assets/widows-cover.png';
+import sweetLiesCover from '../assets/sweet-lies-cover.png';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
@@ -21,7 +26,22 @@ const Work = () => {
     return () => ctx.revert();
   }, []);
 
+  // REORDERED: Inforens is now at the top
   const projects = [
+    {
+      id: "inforens",
+      tag: "UX Strategy / Service Design / Internship Project",
+      title: "Inforens",
+      headline: "Helping a student platform feel as trustworthy as the service behind it.",
+      body: "A UX and service design internship project focused on making mentors, tools, community, and support more visible and believable to international students.",
+      inside: [
+        "A first-time-user audit of trust, clarity, and visibility gaps.",
+        "Website and service recommendations across key student journey stages.",
+        "A rewards system built around real student value, not generic discounts."
+      ],
+      image: inforensCover,
+      placeholder: "[ Project 3 Visual ]"
+    },
     {
       id: "scottish-widows",
       tag: "Service Design / Financial Wellbeing / Live Client Project",
@@ -33,6 +53,7 @@ const Work = () => {
         "Insight synthesis and opportunity framing for a live financial wellbeing brief.",
         "A more human direction for communicating protection and security."
       ],
+      image: widowsCover,
       placeholder: "[ Project 1 Visual ]"
     },
     {
@@ -46,20 +67,8 @@ const Work = () => {
         "A process shaped by accessibility, stakeholder insight, and hard design decisions.",
         "A final outcome that values clarity over spectacle."
       ],
+      image: sweetLiesCover,
       placeholder: "[ Project 2 Visual ]"
-    },
-    {
-      id: "inforens",
-      tag: "UX Strategy / Service Design / Internship Project",
-      title: "Inforens",
-      headline: "Helping a student platform feel as trustworthy as the service behind it.",
-      body: "A UX and service design internship project focused on making mentors, tools, community, and support more visible and believable to international students.",
-      inside: [
-        "A first-time-user audit of trust, clarity, and visibility gaps.",
-        "Website and service recommendations across key student journey stages.",
-        "A rewards system built around real student value, not generic discounts."
-      ],
-      placeholder: "[ Project 3 Visual ]"
     }
   ];
 
@@ -76,14 +85,20 @@ const Work = () => {
 
       <div className="space-y-24">
         {projects.map((project, index) => (
-          <div key={project.id} className="project-card group flex flex-col md:flex-row gap-12">
+          <div key={project.id} className="project-card group flex flex-col md:flex-row gap-12 cursor-none">
             
-            {/* Image Section */}
+            {/* Image Section - Now actually uses your imported images! */}
             <div className={`w-full md:w-5/12 aspect-[4/5] relative overflow-hidden rounded-2xl border border-slate-200 shadow-sm group-hover:shadow-2xl group-hover:shadow-brand-accent-blue/20 transition-all duration-500 ${index % 2 !== 0 ? 'md:order-2' : ''}`}>
-              <div className="absolute inset-0 bg-slate-50 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-              <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-mono text-sm tracking-widest bg-white/50 backdrop-blur-sm group-hover:scale-105 transition-transform duration-700">
-                {project.placeholder}
-              </div>
+              {project.image ? (
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]" />
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-slate-50 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                  <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-mono text-sm tracking-widest bg-white/50 backdrop-blur-sm group-hover:scale-105 transition-transform duration-700">
+                    {project.placeholder}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Text Section */}

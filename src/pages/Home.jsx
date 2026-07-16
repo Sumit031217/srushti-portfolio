@@ -2,31 +2,34 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import profilePhoto from '../assets/srushti.png';
+import inforensCover from '../assets/inforens-cover.png';
 import widowsCover from '../assets/widows-cover.png';
 import sweetLiesCover from '../assets/sweet-lies-cover.png';
-import inforensCover from '../assets/inforens-cover.png';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const pageRef = useRef(null);
   const photoRef = useRef(null);
 
+  // REORDERED: Inforens is now at the top
   const projects = [
+    {
+      id: "inforens", tag: "UX Strategy", title: "Inforens",
+      desc: "Helping a student platform feel as trustworthy as the service behind it.", 
+      image: inforensCover
+    },
     {
       id: "scottish-widows", tag: "Financial Wellbeing", title: "Scottish Widows x GSA",
       desc: "Designing income protection for people whose lives do not fit a fixed salary.", 
-      image: widowsCover // NO QUOTES
+      image: widowsCover
     },
     {
       id: "sweet-lies", tag: "Inclusive Education", title: "Sweet Lies & Bitter Truth",
       desc: "Using one biscuit to open up a much bigger story about empire, labour, and identity.", 
-      image: sweetLiesCover // NO QUOTES
-    },
-    {
-      id: "inforens", tag: "UX Strategy", title: "Inforens",
-      desc: "Helping a student platform feel as trustworthy as the service behind it.", 
-      image: inforensCover // NO QUOTES
+      image: sweetLiesCover
     }
   ];
 
@@ -36,7 +39,6 @@ const Home = () => {
       gsap.utils.toArray('.scroll-anim').forEach((element) => {
         gsap.fromTo(element, { y: 50, opacity: 0 }, { scrollTrigger: { trigger: element, start: "top 85%" }, y: 0, opacity: 1, duration: 0.8, ease: "power2.out" });
       });
-      // Floating animation for the cutout photo
       gsap.to(photoRef.current, { y: -15, duration: 2.5, repeat: -1, yoyo: true, ease: "sine.inOut" });
     }, pageRef);
     return () => ctx.revert();
@@ -95,15 +97,10 @@ const Home = () => {
             </div>
           </div>
           
-          {/* Right Column: Much larger photo container */}
+          {/* Right Column */}
           <div className="hero-anim lg:col-span-5 flex justify-center lg:justify-end relative mt-8 lg:mt-0">
-            {/* Increased w/h classes here for a larger profile image */}
             <div className="relative w-72 h-72 md:w-96 md:h-96 lg:w-[420px] lg:h-[420px] flex items-center justify-center group cursor-none">
-              
-              {/* Glowing Visualization Aura */}
               <div className="absolute inset-0 bg-brand-accent-blue/15 blur-[60px] rounded-full scale-75 group-hover:scale-110 group-hover:bg-brand-accent-blue/30 transition-all duration-700 ease-out z-0"></div>
-              
-              {/* Floating Cutout */}
               <img 
                 ref={photoRef} 
                 src={profilePhoto} 
@@ -117,8 +114,6 @@ const Home = () => {
 
       {/* ALL PROJECTS - CREATIVE GRID */}
       <section className="py-24 border-t border-slate-200 relative">
-        <div className="absolute inset-0 z-[-1] opacity-30" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-        
         <div className="scroll-anim mb-16 text-center max-w-2xl mx-auto">
           <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.25em] text-brand-accent-blue mb-4">Case Studies</h3>
           <h2 className="font-poppins text-3xl md:text-4xl font-bold text-brand-blue">Selected Work</h2>
@@ -129,7 +124,7 @@ const Home = () => {
             <Link to={`/case-study/${project.id}`} key={idx} className="scroll-anim group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:border-brand-accent-blue/30 hover:-translate-y-2 transition-all duration-500 overflow-hidden cursor-none">
               
               <div className="h-48 md:h-56 bg-slate-100 relative overflow-hidden">
-                <div className="absolute inset-0 bg-slate-200 opacity-50" style={{ backgroundImage: 'radial-gradient(#94a3b8 1px, transparent 1px)', backgroundSize: '12px 12px' }}></div>
+                {/* DOTS REMOVED FROM HERE */}
                 <img src={project.image} alt={project.title} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                 
                 <div className="absolute top-4 left-4">

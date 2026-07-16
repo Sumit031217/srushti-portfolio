@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// IMPORT ALL 8 NEWSPAPER PNGs HERE
 import news1 from '../assets/news-1.png';
 import news2 from '../assets/news-2.png';
 import news3 from '../assets/news-3.png';
@@ -12,7 +11,6 @@ import news5 from '../assets/news-5.png';
 import news6 from '../assets/news-6.png';
 import news7 from '../assets/news-7.png';
 import news8 from '../assets/news-8.png';
- 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -198,83 +196,77 @@ const projectData = {
   }
 };
 
-// --- CUSTOM INTERACTIVE NEWSPAPER COMPONENT ---
-const InteractiveFlipbook = ({ srcs, caption, microcopy }) => {
-  const [activePage, setActivePage] = useState(0);
+// --- CUSTOM BOOK SPREAD COMPONENT ---
+const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
+  const [spreadIndex, setSpreadIndex] = useState(0);
+  
+  // Total spreads calculation (Cover = 1 spread, internal pages = 2 per spread)
+  const totalSpreads = Math.ceil((srcs.length + 1) / 2);
 
-  const goToNext = (e) => {
+  const goNext = (e) => {
     e.stopPropagation();
-    if (activePage < srcs.length - 1) setActivePage(p => p + 1);
+    if (spreadIndex < totalSpreads - 1) setSpreadIndex(p => p + 1);
   };
 
-  const goToPrev = (e) => {
+  const goPrev = (e) => {
     e.stopPropagation();
-    if (activePage > 0) setActivePage(p => p - 1);
+    if (spreadIndex > 0) setSpreadIndex(p => p - 1);
   };
+
+  // Logic to make the first page act as a cover on the right side
+  const leftImageIndex = spreadIndex === 0 ? -1 : (spreadIndex * 2) - 1;
+  const rightImageIndex = spreadIndex === 0 ? 0 : (spreadIndex * 2);
 
   return (
     <div className="scroll-fade my-16 w-full flex flex-col group cursor-none">
       
-      {/* Viewer Desk Area - Changed to a tall, vertical container for a much closer view! */}
       <div 
-        className="relative w-full h-[75vh] min-h-[600px] max-h-[900px] bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 cursor-pointer transition-colors hover:bg-[#f1f1eb]" 
-        onClick={goToNext}
+        className="relative w-full bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 cursor-pointer transition-colors hover:bg-[#f1f1eb]" 
+        onClick={goNext}
       >
-        
-        {/* Subtle Desk Texture */}
-        <div className="absolute inset-0 opacity-30 mix-blend-multiply pointer-events-none" style={{ backgroundImage: 'radial-gradient(#94a3b8 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
+        <div className="relative w-full max-w-6xl aspect-[1.4/1] flex shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)] rounded-sm bg-white">
+          
+          {/* Left Page */}
+          <div className={`w-1/2 h-full relative flex items-center justify-center overflow-hidden ${leftImageIndex < 0 ? 'bg-transparent' : 'bg-white border-r border-slate-300'}`}>
+            {leftImageIndex >= 0 && srcs[leftImageIndex] && (
+              <>
+                <div className="absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
+                <img 
+                  src={srcs[leftImageIndex]} 
+                  alt={`Left Page ${leftImageIndex + 1}`} 
+                  className="w-full h-full object-contain" 
+                  style={{ imageRendering: '-webkit-optimize-contrast' }} 
+                />
+              </>
+            )}
+          </div>
 
-        {/* Stack Container - Made drastically larger. Now it scales based on height to fill the screen! */}
-        <div className="relative h-[90%] md:h-[100%] aspect-[7/10] perspective-[3000px]">
-          {srcs.map((src, index) => {
-            const isTurned = index < activePage;
-            const isActive = index === activePage;
-            const isWaiting = index > activePage;
+          {/* Right Page */}
+          <div className="w-1/2 h-full relative bg-white flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
+            {/* The parsing error was caused by a comment directly in this exact line. It has been safely removed. */}
+            {rightImageIndex < srcs.length && srcs[rightImageIndex] && (
+              <img 
+                src={srcs[rightImageIndex]} 
+                alt={`Right Page ${rightImageIndex + 1}`} 
+                className="w-full h-full object-contain" 
+                style={{ imageRendering: '-webkit-optimize-contrast' }} 
+              />
+            )}
+          </div>
 
-            const zIndex = srcs.length - index;
-            // Spread offset adjusted for the larger page size
-            const offset = isWaiting ? (index - activePage) * 6 : 0; 
-            // Turn the page to the left
-            const rotateY = isTurned ? -110 : 0; 
-            const opacity = isTurned ? 0 : 1;
-
-            return (
-              <div
-                key={index}
-                className="absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)]"
-                style={{
-                  zIndex,
-                  opacity,
-                  transformOrigin: 'left center',
-                  transform: `rotateY(${rotateY}deg) translateX(${offset}px) translateY(${offset}px)`,
-                  pointerEvents: isActive ? 'auto' : 'none'
-                }}
-              >
-                {/* Individual Page Styles - Now massive and readable */}
-                <div className="w-full h-full relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-slate-200 flex flex-col overflow-hidden rounded-r-md">
-                  {/* Spine shadow for realism */}
-                  <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/10 to-transparent z-10 pointer-events-none"></div>
-                  
-                  <img src={src} alt={`Newspaper Page ${index + 1}`} className="w-full h-full object-contain bg-white" />
-                </div>
-              </div>
-            );
-          })}
         </div>
 
-        {/* Hover Hint on the Right Side */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none hidden md:flex">
-          {activePage < srcs.length - 1 && (
+          {spreadIndex < totalSpreads - 1 && (
             <span className="bg-brand-blue text-white text-[10px] uppercase tracking-widest px-4 py-2 rounded-full font-bold shadow-xl flex items-center gap-2">
-              Click to flip <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+              Next spread <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
             </span>
           )}
         </div>
       </div>
 
-      {/* Interactive Controls Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-6">
-        
         {microcopy && (
           <div className="flex gap-2 flex-wrap order-2 md:order-1">
             {microcopy.map((label, idx) => (
@@ -285,54 +277,61 @@ const InteractiveFlipbook = ({ srcs, caption, microcopy }) => {
           </div>
         )}
 
-        {/* Page Nav Buttons */}
         <div className="flex items-center gap-6 order-1 md:order-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
-          <button onClick={goToPrev} disabled={activePage === 0} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${activePage === 0 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
+          <button onClick={goPrev} disabled={spreadIndex === 0} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${spreadIndex === 0 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
-
+          
           <span className="font-mono text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-            Page {activePage + 1} of {srcs.length}
+            Spread {spreadIndex + 1} of {totalSpreads}
           </span>
-
-          <button onClick={goToNext} disabled={activePage === srcs.length - 1} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${activePage === srcs.length - 1 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
+          
+          <button onClick={goNext} disabled={spreadIndex >= totalSpreads - 1} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-none ${spreadIndex >= totalSpreads - 1 ? 'bg-slate-50 text-slate-300' : 'bg-slate-100 text-brand-blue hover:bg-brand-accent-blue hover:text-white'}`}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
         </div>
       </div>
-      
       <p className="font-montserrat text-sm text-slate-500 font-medium pl-3 border-l-2 border-brand-accent-blue/30 mt-6 self-start">{caption}</p>
     </div>
   );
 };
 
-
 const CaseStudy = () => {
   const { id } = useParams();
   const project = projectData[id] || projectData["scottish-widows"];
   const pageRef = useRef(null);
+  
   const [activeSection, setActiveSection] = useState('brief');
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const sections = ['Brief', 'Approach', 'Output', 'Outcome', 'Challenges'];
 
-  // Scroll logic for the clickable sticky nav
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId.toLowerCase());
     if (element) {
-      const offset = 140; 
+      const offset = 120;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
       const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     }
   };
 
-  // Scroll Spy for Progress Bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(100, Math.max(0, (scrollTop / docHeight) * 100));
+      setScrollProgress(progress);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); 
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -344,12 +343,10 @@ const CaseStudy = () => {
       },
       { rootMargin: "-30% 0px -70% 0px" } 
     );
-
     sections.forEach((sec) => {
       const el = document.getElementById(sec.toLowerCase());
       if (el) observer.observe(el);
     });
-
     return () => observer.disconnect();
   }, [sections]);
 
@@ -365,27 +362,19 @@ const CaseStudy = () => {
 
   if (!project) return <div className="p-20 text-center font-mono">Case study not found.</div>;
 
-  // Standard Image Block
   const ImageBlock = ({ image }) => {
     if (!image) return null;
-
-    // Checks if the image object requires the Newspaper Flipbook layout
     if (image.type === 'newspaper') {
-      return <InteractiveFlipbook srcs={image.srcs} caption={image.caption} microcopy={image.microcopy} />;
+      return <BookSpreadViewer srcs={image.srcs} caption={image.caption} microcopy={image.microcopy} />;
     }
-
     return (
       <div className="scroll-fade my-12 group">
         <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
-          
           {image.src ? (
             <img src={image.src} alt={image.text} className="w-full h-full object-contain p-4 z-10" />
           ) : (
             <div className="p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
           )}
-          
-          <div className="absolute inset-0 bg-slate-100 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-          
           {image.microcopy && (
             <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap z-20">
               {image.microcopy.map((label, idx) => (
@@ -406,20 +395,40 @@ const CaseStudy = () => {
     : 'grid-cols-1 md:grid-cols-3';
 
   return (
-    <div ref={pageRef} className="pb-24">
+    <div ref={pageRef} className="pb-24"> 
       
-      {/* STICKY SEGMENTED PROGRESS BAR - Tighter Gap */}
-      <div className="sticky top-[48px] md:top-[56px] lg:top-[60px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm">
-        <div className="max-w-4xl mx-auto flex gap-1 md:gap-2">
-          {sections.map((sec) => (
-            <button 
-              key={sec} 
-              onClick={() => scrollToSection(sec)}
-              className={`flex-1 h-2 md:h-10 rounded-full md:rounded-lg flex items-center justify-center transition-all duration-500 cursor-none ${activeSection === sec.toLowerCase() ? 'bg-brand-accent-blue text-white shadow-md shadow-brand-accent-blue/20 scale-105' : 'bg-brand-accent-blue/10 text-brand-accent-blue/70 hover:bg-brand-accent-blue/20'}`}
-            >
-              <span className="hidden md:block font-poppins text-xs font-bold uppercase tracking-wider">{sec}</span>
-            </button>
-          ))}
+      {/* WATER-FILL STICKY PROGRESS BAR - SEPARATED BUTTONS */}
+      <div className="sticky top-[65px] -mt-10 md:-mt-12 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full">
+        <div className="max-w-4xl mx-auto flex gap-2 md:gap-3 h-10 md:h-12">
+          {sections.map((sec, index) => {
+            const sectionSpan = 100 / sections.length;
+            const startOffset = index * sectionSpan;
+            const fillPercent = Math.max(0, Math.min(100, ((scrollProgress - startOffset) / sectionSpan) * 100));
+            const isTextWhite = fillPercent > 50;
+
+            return (
+              <button 
+                key={sec} 
+                onClick={() => scrollToSection(sec)}
+                className="flex-1 relative bg-brand-accent-blue/10 rounded-full md:rounded-lg overflow-hidden flex items-center justify-center shadow-inner cursor-none transition-transform duration-300 hover:scale-[1.03]"
+              >
+                <div 
+                  className="absolute left-0 top-0 bottom-0 bg-brand-accent-blue shadow-[2px_0_10px_rgba(124,58,237,0.4)]"
+                  style={{ width: `${fillPercent}%`, transition: 'width 0.1s ease-out' }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"></div>
+                </div>
+
+                <span 
+                  className={`relative z-10 hidden md:block font-poppins text-xs font-bold uppercase tracking-wider transition-colors duration-300
+                    ${isTextWhite ? 'text-white' : 'text-brand-accent-blue/70'}
+                  `}
+                >
+                  {sec}
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -440,12 +449,12 @@ const CaseStudy = () => {
 
         <ImageBlock image={project.image1} />
 
-        {/* HERO COPY - Styled as an intro block */}
+        {/* HERO COPY */}
         <div className="animate-up text-lg md:text-xl font-montserrat font-light text-slate-700 leading-relaxed border-l-4 border-brand-accent-blue pl-6 md:pl-10 my-16">
           {project.heroCopy}
         </div>
 
-        {/* QUICK FACTS - EDITORIAL TYPOGRAPHY GRID */}
+        {/* QUICK FACTS */}
         <div className="animate-up mb-24 border-y border-slate-200 py-12">
           <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 text-center">Project Overview</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
@@ -474,7 +483,6 @@ const CaseStudy = () => {
           <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-12 mb-12">
             <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-6">Approach</h3>
             <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.approach}</p>
-            
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
               <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Process Steps</h4>
               <ul className="space-y-4 font-montserrat text-slate-700 font-medium text-sm md:text-base">
@@ -512,7 +520,7 @@ const CaseStudy = () => {
           <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.output}</p>
           <div className="flex flex-wrap gap-3">
             {project.outputBullets.map((bullet, idx) => (
-              <span key={idx} className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs font-mono font-medium text-slate-700">
+              <span key={idx} className="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-mono font-medium text-slate-700 hover:border-brand-accent-blue hover:text-brand-accent-blue hover:shadow-[0_5px_15px_rgba(124,58,237,0.15)] hover:-translate-y-1 transition-all duration-300 cursor-none">
                 {bullet}
               </span>
             ))}
@@ -539,12 +547,12 @@ const CaseStudy = () => {
 
         {/* CHALLENGES */}
         <section id="challenges" className="scroll-fade pt-12 pb-8">
-          <div className="bg-amber-50 border border-amber-100 p-8 md:p-12 rounded-3xl">
-            <h3 className="font-poppins text-3xl font-bold text-amber-900 mb-6 flex items-center gap-3">
-              <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <div className="bg-slate-50 border border-slate-200 p-8 md:p-12 rounded-3xl">
+            <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6 flex items-center gap-3">
+              <svg className="w-8 h-8 text-brand-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
               Challenges
             </h3>
-            <p className="font-montserrat text-lg font-light text-amber-800 leading-relaxed">{project.challenges}</p>
+            <p className="font-montserrat text-lg font-light text-slate-700 leading-relaxed">{project.challenges}</p>
           </div>
         </section>
         
