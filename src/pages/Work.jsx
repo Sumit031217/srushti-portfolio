@@ -26,7 +26,6 @@ const Work = () => {
     return () => ctx.revert();
   }, []);
 
-  // REORDERED: Inforens is now at the top
   const projects = [
     {
       id: "inforens",
@@ -87,10 +86,19 @@ const Work = () => {
         {projects.map((project, index) => (
           <div key={project.id} className="project-card group flex flex-col md:flex-row gap-12 cursor-none">
             
-            {/* Image Section - Now actually uses your imported images! */}
-            <div className={`w-full md:w-5/12 aspect-[4/5] relative overflow-hidden rounded-2xl border border-slate-200 shadow-sm group-hover:shadow-2xl group-hover:shadow-brand-accent-blue/20 transition-all duration-500 ${index % 2 !== 0 ? 'md:order-2' : ''}`}>
+            {/* Image Section - Added flex centering so custom-sized images float perfectly in the middle */}
+            <div className={`w-full md:w-5/12 aspect-[4/5] relative overflow-hidden rounded-2xl border border-slate-200 shadow-sm group-hover:shadow-2xl group-hover:shadow-brand-accent-blue/20 transition-all duration-500 bg-slate-50 flex items-center justify-center ${index % 2 !== 0 ? 'md:order-2' : ''}`}>
               {project.image ? (
-                <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]" />
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  /* CONDITIONAL STYLING: Inforens is exactly 70% width. Others remain 100% edge-to-edge. */
+                  className={`group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+                    project.id === 'inforens' 
+                      ? 'w-[100%] h-auto object-contain drop-shadow-2xl' 
+                      : 'w-full h-full object-cover'
+                  }`} 
+                />
               ) : (
                 <>
                   <div className="absolute inset-0 bg-slate-50 opacity-50" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>

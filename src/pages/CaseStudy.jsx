@@ -200,7 +200,6 @@ const projectData = {
 const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
   const [spreadIndex, setSpreadIndex] = useState(0);
   
-  // Total spreads calculation (Cover = 1 spread, internal pages = 2 per spread)
   const totalSpreads = Math.ceil((srcs.length + 1) / 2);
 
   const goNext = (e) => {
@@ -213,21 +212,22 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
     if (spreadIndex > 0) setSpreadIndex(p => p - 1);
   };
 
-  // Logic to make the first page act as a cover on the right side
   const leftImageIndex = spreadIndex === 0 ? -1 : (spreadIndex * 2) - 1;
   const rightImageIndex = spreadIndex === 0 ? 0 : (spreadIndex * 2);
 
   return (
     <div className="scroll-fade my-16 w-full flex flex-col group cursor-none">
       
-      <div 
-        className="relative w-full bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 cursor-pointer transition-colors hover:bg-[#f1f1eb]" 
-        onClick={goNext}
-      >
+      {/* Outer Container (Removed the global onClick so we can split it!) */}
+      <div className="relative w-full bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 transition-colors hover:bg-[#f1f1eb]">
+        
         <div className="relative w-full max-w-6xl aspect-[1.4/1] flex shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)] rounded-sm bg-white">
           
-          {/* Left Page */}
-          <div className={`w-1/2 h-full relative flex items-center justify-center overflow-hidden ${leftImageIndex < 0 ? 'bg-transparent' : 'bg-white border-r border-slate-300'}`}>
+          {/* LEFT PAGE - Click to go PREVIOUS */}
+          <div 
+            onClick={goPrev}
+            className={`w-1/2 h-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors ${leftImageIndex < 0 ? 'bg-transparent cursor-default hover:bg-transparent' : 'bg-white border-r border-slate-300'}`}
+          >
             {leftImageIndex >= 0 && srcs[leftImageIndex] && (
               <>
                 <div className="absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
@@ -241,10 +241,12 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
             )}
           </div>
 
-          {/* Right Page */}
-          <div className="w-1/2 h-full relative bg-white flex items-center justify-center overflow-hidden">
+          {/* RIGHT PAGE - Click to go NEXT */}
+          <div 
+            onClick={goNext}
+            className="w-1/2 h-full relative bg-white flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors"
+          >
             <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
-            {/* The parsing error was caused by a comment directly in this exact line. It has been safely removed. */}
             {rightImageIndex < srcs.length && srcs[rightImageIndex] && (
               <img 
                 src={srcs[rightImageIndex]} 
@@ -257,15 +259,26 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
 
         </div>
 
+        {/* Hover Hint - LEFT SIDE (Previous) */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none hidden md:flex">
+          {spreadIndex > 0 && (
+            <span className="bg-brand-blue text-white text-[10px] uppercase tracking-widest px-4 py-2 rounded-full font-bold shadow-xl flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg> Previous
+            </span>
+          )}
+        </div>
+
+        {/* Hover Hint - RIGHT SIDE (Next) */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none hidden md:flex">
           {spreadIndex < totalSpreads - 1 && (
             <span className="bg-brand-blue text-white text-[10px] uppercase tracking-widest px-4 py-2 rounded-full font-bold shadow-xl flex items-center gap-2">
-              Next spread <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+              Next <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
             </span>
           )}
         </div>
       </div>
 
+      {/* Interactive Controls Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-6">
         {microcopy && (
           <div className="flex gap-2 flex-wrap order-2 md:order-1">
@@ -295,7 +308,6 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
     </div>
   );
 };
-
 const CaseStudy = () => {
   const { id } = useParams();
   const project = projectData[id] || projectData["scottish-widows"];
@@ -412,10 +424,17 @@ const CaseStudy = () => {
                 onClick={() => scrollToSection(sec)}
                 className="flex-1 relative bg-brand-accent-blue/10 rounded-full md:rounded-lg overflow-hidden flex items-center justify-center shadow-inner cursor-none transition-transform duration-300 hover:scale-[1.03]"
               >
+                {/* GPU HARDWARE-ACCELERATED SMOOTH FILL */}
                 <div 
-                  className="absolute left-0 top-0 bottom-0 bg-brand-accent-blue shadow-[2px_0_10px_rgba(124,58,237,0.4)]"
-                  style={{ width: `${fillPercent}%`, transition: 'width 0.1s ease-out' }}
+                  className="absolute left-0 top-0 bottom-0 w-full bg-brand-accent-blue shadow-[2px_0_10px_rgba(124,58,237,0.4)]"
+                  style={{ 
+                    transform: `scaleX(${fillPercent / 100})`,
+                    transformOrigin: 'left',
+                    transition: 'transform 0.15s ease-out',
+                    willChange: 'transform'
+                  }}
                 >
+                  {/* Subtle inner gradient to make the water look deep without changing the edges */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"></div>
                 </div>
 
