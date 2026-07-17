@@ -308,7 +308,6 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
     </div>
   );
 };
-
 const CaseStudy = () => {
   const { id } = useParams();
   const project = projectData[id] || projectData["scottish-widows"];
@@ -316,9 +315,6 @@ const CaseStudy = () => {
   
   const [activeSection, setActiveSection] = useState('brief');
   const [scrollProgress, setScrollProgress] = useState(0);
-  
-  // NEW CREATIVENESS: Ambient Mouse Tracker
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const sections = ['Brief', 'Approach', 'Output', 'Outcome', 'Challenges'];
 
@@ -342,19 +338,10 @@ const CaseStudy = () => {
       setScrollProgress(progress);
     };
     
-    // NEW CREATIVENESS: Mouse listener for ambient spotlight
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
     handleScroll(); 
     
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -381,21 +368,6 @@ const CaseStudy = () => {
       gsap.utils.toArray('.scroll-fade').forEach((element) => {
         gsap.fromTo(element, { y: 40, opacity: 0 }, { scrollTrigger: { trigger: element, start: "top 85%" }, y: 0, opacity: 1, duration: 0.8, ease: "power2.out" });
       });
-
-      // NEW CREATIVENESS: Subtle scroll parallax on the Insight Numbers
-      gsap.utils.toArray('.parallax-number').forEach((element) => {
-        gsap.to(element, {
-          y: -20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: element.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      });
-
     }, pageRef);
     return () => ctx.revert();
   }, [id]);
@@ -408,10 +380,8 @@ const CaseStudy = () => {
       return <BookSpreadViewer srcs={image.srcs} caption={image.caption} microcopy={image.microcopy} />;
     }
     return (
-      <div className="scroll-fade my-12 group cursor-none relative">
-        {/* NEW CREATIVENESS: Subtle hover glow behind images */}
-        <div className="absolute inset-0 bg-brand-accent-blue/5 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10 rounded-2xl"></div>
-        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4 group-hover:shadow-[0_15px_40px_rgba(124,58,237,0.1)] transition-all duration-500 hover:-translate-y-1">
+      <div className="scroll-fade my-12 group">
+        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
           {image.src ? (
             <img src={image.src} alt={image.text} className="w-full h-full object-contain p-4 z-10" />
           ) : (
@@ -437,23 +407,7 @@ const CaseStudy = () => {
     : 'grid-cols-1 md:grid-cols-3';
 
   return (
-    <div ref={pageRef} className="pb-24 relative selection:bg-brand-accent-blue selection:text-white"> 
-      
-      {/* NEW CREATIVENESS: Dynamic Ambient Spotlight tracking the mouse */}
-      <div 
-        className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300 opacity-60"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(124, 58, 237, 0.04), transparent 40%)`
-        }}
-      />
-
-      {/* NEW CREATIVENESS: Global Micro Progress Bar at absolute top */}
-      <div className="fixed top-0 left-0 w-full h-[2px] bg-slate-100 z-[9999]">
-        <div 
-          className="h-full bg-brand-accent-blue"
-          style={{ width: `${scrollProgress}%`, transition: 'width 0.1s ease-out' }}
-        />
-      </div>
+    <div ref={pageRef} className="pb-24"> 
       
       {/* WATER-FILL STICKY PROGRESS BAR - SEPARATED BUTTONS */}
       <div className="sticky top-[65px] -mt-10 md:-mt-12 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full">
@@ -497,11 +451,11 @@ const CaseStudy = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 md:px-12 pt-16 relative z-10">
+      <div className="max-w-4xl mx-auto px-6 md:px-12 pt-16">
         
         {/* HEADER */}
         <div className="animate-up mb-16 text-center">
-          <span className="inline-block px-4 py-1.5 bg-slate-50 border border-slate-200 text-brand-accent-blue text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-8 shadow-sm hover:border-brand-accent-blue/40 transition-colors">
+          <span className="inline-block px-4 py-1.5 bg-slate-50 border border-slate-200 text-brand-accent-blue text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-8 shadow-sm">
             {project.tag}
           </span>
           <h1 className="font-poppins text-4xl md:text-6xl font-bold tracking-tight text-brand-blue mb-6 leading-tight">
@@ -520,13 +474,13 @@ const CaseStudy = () => {
         </div>
 
         {/* QUICK FACTS */}
-        <div className="animate-up mb-24 border-y border-slate-200 py-12 group">
-          <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 text-center group-hover:text-brand-accent-blue transition-colors duration-500">Project Overview</h3>
+        <div className="animate-up mb-24 border-y border-slate-200 py-12">
+          <h3 className="font-poppins text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 text-center">Project Overview</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
             {project.quickFacts.map((fact, idx) => {
               const [key, val] = fact.split(': ');
               return (
-                <div key={idx} className="flex flex-col transform hover:-translate-y-1 transition-transform duration-300">
+                <div key={idx} className="flex flex-col">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-brand-accent-blue font-bold mb-2">{key}</span>
                   <span className="font-montserrat text-sm md:text-base font-medium text-brand-blue leading-snug">{val}</span>
                 </div>
@@ -545,16 +499,16 @@ const CaseStudy = () => {
 
         {/* APPROACH */}
         <section id="approach" className="scroll-fade pt-12 pb-8">
-          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-12 mb-12 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(124,58,237,0.05)] hover:border-brand-accent-blue/20 transition-all duration-500">
+          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-12 mb-12">
             <h3 className="font-poppins text-4xl font-bold text-brand-blue mb-6">Approach</h3>
             <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.approach}</p>
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
               <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Process Steps</h4>
               <ul className="space-y-4 font-montserrat text-slate-700 font-medium text-sm md:text-base">
                 {project.approachBullets.map((bullet, idx) => (
-                  <li key={idx} className="flex items-start gap-4 group">
-                    <span className="w-6 h-6 rounded-full bg-brand-accent-blue/10 text-brand-accent-blue flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 group-hover:bg-brand-accent-blue group-hover:text-white transition-colors duration-300">{idx + 1}</span>
-                    <span className="group-hover:text-brand-blue transition-colors duration-300">{bullet}</span>
+                  <li key={idx} className="flex items-start gap-4">
+                    <span className="w-6 h-6 rounded-full bg-brand-accent-blue/10 text-brand-accent-blue flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">{idx + 1}</span>
+                    {bullet}
                   </li>
                 ))}
               </ul>
@@ -569,11 +523,9 @@ const CaseStudy = () => {
           <h3 className="font-poppins text-sm font-bold uppercase tracking-[0.2em] text-brand-accent-blue mb-8 text-center">Key Insights</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {project.insights.map((insight, idx) => (
-              <div key={idx} className="group relative bg-white border border-slate-200 p-8 rounded-2xl shadow-sm hover:shadow-[0_10px_30px_rgba(124,58,237,0.1)] hover:-translate-y-2 hover:border-brand-accent-blue/40 transition-all duration-500 overflow-hidden cursor-none">
-                {/* NEW CREATIVENESS: Parallax Numbering */}
-                <span className="parallax-number text-6xl font-poppins font-black text-slate-100 block mb-4 leading-none group-hover:text-brand-accent-blue/10 transition-colors duration-500 absolute -top-4 -right-4 z-0">0{idx + 1}</span>
-                <span className="text-5xl font-poppins font-bold text-brand-accent-blue block mb-6 leading-none relative z-10">0{idx + 1}</span>
-                <p className="font-montserrat text-sm font-medium text-brand-blue leading-relaxed relative z-10">{insight}</p>
+              <div key={idx} className="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <span className="text-5xl font-poppins font-bold text-slate-100 block mb-6 leading-none">0{idx + 1}</span>
+                <p className="font-montserrat text-sm font-medium text-brand-blue leading-relaxed">{insight}</p>
               </div>
             ))}
           </div>
@@ -587,7 +539,7 @@ const CaseStudy = () => {
           <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.output}</p>
           <div className="flex flex-wrap gap-3">
             {project.outputBullets.map((bullet, idx) => (
-              <span key={idx} className="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-mono font-medium text-slate-700 hover:border-brand-accent-blue hover:text-white hover:bg-brand-accent-blue hover:shadow-[0_5px_15px_rgba(124,58,237,0.3)] hover:-translate-y-1 transition-all duration-300 cursor-none">
+              <span key={idx} className="px-5 py-2.5 bg-white border border-slate-200 rounded-full text-xs font-mono font-medium text-slate-700 hover:border-brand-accent-blue hover:text-brand-accent-blue hover:shadow-[0_5px_15px_rgba(124,58,237,0.15)] hover:-translate-y-1 transition-all duration-300 cursor-none">
                 {bullet}
               </span>
             ))}
@@ -602,9 +554,9 @@ const CaseStudy = () => {
           <p className="font-montserrat text-lg font-light text-slate-600 leading-relaxed mb-10">{project.outcome}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {project.outcomeBullets.map((bullet, idx) => (
-              <div key={idx} className="group flex flex-col gap-3 p-6 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-[0_10px_30px_rgba(124,58,237,0.08)] hover:-translate-y-1 hover:border-brand-accent-blue/30 transition-all duration-500 cursor-none">
-                <span className="w-8 h-1 bg-brand-accent-blue rounded-full group-hover:w-12 transition-all duration-300"></span>
-                <p className="font-montserrat text-sm text-slate-700 font-medium leading-relaxed group-hover:text-brand-blue transition-colors duration-300">{bullet}</p>
+              <div key={idx} className="flex flex-col gap-3 p-6 bg-slate-50 rounded-xl border border-slate-100">
+                <span className="w-8 h-1 bg-brand-accent-blue rounded-full"></span>
+                <p className="font-montserrat text-sm text-slate-700 font-medium leading-relaxed">{bullet}</p>
               </div>
             ))}
           </div>
@@ -614,20 +566,19 @@ const CaseStudy = () => {
 
         {/* CHALLENGES */}
         <section id="challenges" className="scroll-fade pt-12 pb-8">
-          <div className="bg-slate-50 border border-slate-200 p-8 md:p-12 rounded-3xl group hover:shadow-[0_15px_40px_rgba(124,58,237,0.06)] hover:border-brand-accent-blue/20 transition-all duration-500 cursor-none relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent-blue/5 rounded-full blur-2xl transform translate-x-10 -translate-y-10 group-hover:bg-brand-accent-blue/10 transition-colors duration-500"></div>
-            <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6 flex items-center gap-3 relative z-10">
-              <svg className="w-8 h-8 text-brand-accent-blue transform group-hover:rotate-12 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <div className="bg-slate-50 border border-slate-200 p-8 md:p-12 rounded-3xl">
+            <h3 className="font-poppins text-3xl font-bold text-brand-blue mb-6 flex items-center gap-3">
+              <svg className="w-8 h-8 text-brand-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
               Challenges
             </h3>
-            <p className="font-montserrat text-lg font-light text-slate-700 leading-relaxed relative z-10 group-hover:text-brand-blue transition-colors duration-300">{project.challenges}</p>
+            <p className="font-montserrat text-lg font-light text-slate-700 leading-relaxed">{project.challenges}</p>
           </div>
         </section>
         
         <ImageBlock image={project.image7} />
 
         {/* REFLECTIONS */}
-        <section className="scroll-fade bg-brand-blue text-white p-10 md:p-16 rounded-[2.5rem] mt-16 shadow-[0_20px_50px_rgba(0,0,0,0.2)] relative overflow-hidden">
+        <section className="scroll-fade bg-brand-blue text-white p-10 md:p-16 rounded-[2.5rem] mt-16 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent-blue rounded-full blur-[100px] opacity-30 -mr-20 -mt-20 pointer-events-none"></div>
           
           <h3 className="font-poppins text-4xl font-bold text-white mb-6 relative z-10">Reflections</h3>
@@ -635,9 +586,9 @@ const CaseStudy = () => {
           
           <div className={`grid ${reflectionGridClass} gap-6 relative z-10`}>
             {project.reflectionCards.map((card, idx) => (
-              <div key={idx} className="group bg-white/5 border border-white/10 backdrop-blur-md p-8 rounded-2xl hover:bg-white/10 hover:-translate-y-2 hover:border-brand-accent-blue/50 hover:shadow-[0_10px_30px_rgba(124,58,237,0.2)] transition-all duration-500 cursor-none">
-                <span className="text-xs font-mono text-brand-accent-blue block mb-4 font-bold uppercase tracking-widest group-hover:text-white transition-colors duration-300">Takeaway 0{idx + 1}</span>
-                <p className="font-montserrat text-sm font-medium text-slate-100 leading-relaxed group-hover:text-white transition-colors duration-300">{card}</p>
+              <div key={idx} className="bg-white/5 border border-white/10 backdrop-blur-md p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                <span className="text-xs font-mono text-brand-accent-blue block mb-4 font-bold uppercase tracking-widest">Takeaway 0{idx + 1}</span>
+                <p className="font-montserrat text-sm font-medium text-slate-100 leading-relaxed">{card}</p>
               </div>
             ))}
           </div>
