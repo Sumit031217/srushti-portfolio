@@ -23,14 +23,14 @@ const About = () => {
   const scrollWrapperRef = useRef(null);
   const terminalEndRef = useRef(null);
 
-  // --- MOUSE TRACKING SPOTLIGHT & 3D TILT ---
+  // --- MOUSE TRACKING SPOTLIGHT, 3D TILT & SUN CURSOR ---
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!containerRef.current) return;
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
       
-      // Spotlight coordinates
+      // Spotlight & Sun Cursor coordinates
       containerRef.current.style.setProperty('--mouse-x', `${clientX}px`);
       containerRef.current.style.setProperty('--mouse-y', `${clientY}px`);
 
@@ -137,7 +137,7 @@ const About = () => {
       gsap.to(".float-slow", { y: -15, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
       gsap.to(".float-fast", { y: -8, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 0.5 });
 
-      // 5. THE HORIZONTAL SCROLL MEMORY WALL (Your original effect!)
+      // 5. THE HORIZONTAL SCROLL MEMORY WALL
       const wrapper = scrollWrapperRef.current;
       if (wrapper) {
         const totalScroll = wrapper.scrollWidth - window.innerWidth;
@@ -169,6 +169,20 @@ const About = () => {
       style={{ '--mouse-x': '50vw', '--mouse-y': '50vh', '--tilt-x': '0deg', '--tilt-y': '0deg' }}
     >
       
+      {/* --- CUSTOM SUN CURSOR --- */}
+      <div 
+        className="pointer-events-none fixed z-[99999] transition-transform duration-75 mix-blend-screen"
+        style={{
+          left: 'var(--mouse-x)',
+          top: 'var(--mouse-y)',
+          width: '150px',
+          height: '150px',
+          transform: 'translate(-50%, -50%)',
+          background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,230,0,0.8) 15%, rgba(255,100,0,0.4) 40%, transparent 70%)',
+          filter: 'blur(4px)',
+        }}
+      ></div>
+
       {/* --- BULLETPROOF SPACER --- */}
       <div className="h-32 w-full block pointer-events-none"></div>
 
@@ -223,6 +237,7 @@ const About = () => {
               <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full p-2 bg-gradient-to-tr from-brand-accent-blue to-transparent transform-gpu group-hover:rotate-6 transition-transform duration-700 cursor-none">
                 <div className="w-full h-full rounded-full overflow-hidden bg-brand-blue relative">
                   <img src={profilePhoto} alt="Srushti" className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-110 transition-all duration-700" />
+                  {/* Photo Scanner Line */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/50 blur-sm -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite]"></div>
                 </div>
               </div>
@@ -231,7 +246,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* --- SECTION 2: INTERACTIVE SKILL GALAXY (UX Focused) --- */}
+        {/* --- SECTION 2: INTERACTIVE SKILL GALAXY (UX Focused & Neon Rings) --- */}
         <section className="py-24 relative flex flex-col items-center justify-center min-h-[70vh]">
           <h2 className={`font-poppins text-3xl font-bold uppercase tracking-widest mb-24 text-center ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>
             Skill <span className="text-brand-accent-blue">Universe</span>
@@ -244,8 +259,8 @@ const About = () => {
               <span className={`font-mono text-xs font-bold tracking-widest text-center ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>SERVICE<br/>DESIGN</span>
             </div>
 
-            {/* Orbit 1: Strategy */}
-            <div className={`absolute w-full h-full border rounded-full animate-[spin_25s_linear_infinite] ${theme === 'light' ? 'border-slate-300' : 'border-white/10'}`}>
+            {/* Orbit 1: Strategy (Neon Cyan) */}
+            <div className="absolute w-full h-full rounded-full animate-[spin_25s_linear_infinite] border-2 border-[#00f3ff] shadow-[0_0_30px_rgba(0,243,255,0.4),inset_0_0_30px_rgba(0,243,255,0.4)]">
               <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 backdrop-blur-sm border rounded-full flex items-center justify-center animate-[spin_25s_linear_infinite_reverse] hover:bg-brand-accent-blue hover:text-white hover:scale-125 transition-all cursor-none group ${glassStyle}`}>
                 <span className="font-mono text-[10px] text-center font-bold">Journey<br/>Mapping</span>
                 <div className="absolute top-full mt-2 w-max px-3 py-1 bg-brand-blue text-white text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity">Ecosystem Analysis</div>
@@ -255,8 +270,8 @@ const About = () => {
               </div>
             </div>
 
-            {/* Orbit 2: Execution (Counter-rotating) */}
-            <div className={`absolute w-[65%] h-[65%] border rounded-full animate-[spin_18s_linear_infinite_reverse] ${theme === 'light' ? 'border-slate-300' : 'border-white/10'}`}>
+            {/* Orbit 2: Execution (Neon Purple Counter-rotating) */}
+            <div className="absolute w-[65%] h-[65%] rounded-full animate-[spin_18s_linear_infinite_reverse] border-2 border-[#b026ff] shadow-[0_0_30px_rgba(176,38,255,0.4),inset_0_0_30px_rgba(176,38,255,0.4)]">
               <div className={`absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-20 h-20 backdrop-blur-sm border rounded-full flex items-center justify-center animate-[spin_18s_linear_infinite] hover:bg-brand-accent-blue hover:text-white hover:scale-125 transition-all cursor-none group ${glassStyle}`}>
                 <span className="font-mono text-[10px] text-center font-bold">UX<br/>Strategy</span>
               </div>
@@ -300,13 +315,13 @@ const About = () => {
         <section className="py-24">
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Animated Stats */}
+            {/* Animated Stats (Updated to your preferences) */}
             <div className="grid grid-cols-2 gap-6">
               {[
-                { label: 'Projects Built', target: '12', suffix: '+' },
-                { label: 'Interviews Conducted', target: '40', suffix: '+' },
-                { label: 'Coffees Consumed', target: '999', suffix: '+' },
-                { label: 'Design Tools', target: '8', suffix: '' }
+                { label: 'Ice Tea Consumed', target: '999', suffix: '+' },
+                { label: 'Sunsets Watched', target: '333', suffix: '+' },
+                { label: 'Cuisines Tried', target: '15', suffix: '+' },
+                { label: 'Chocolate Types', target: '100', suffix: '+' }
               ].map((stat, i) => (
                 <div key={i} className={`backdrop-blur-md ${glassStyle} p-6 rounded-xl flex flex-col justify-center items-center text-center group hover:border-brand-accent-blue transition-colors duration-300 cursor-none float-slow shadow-lg`} style={{ animationDelay: `${i * 0.2}s` }}>
                   <span className="stat-counter font-poppins text-4xl md:text-5xl font-black text-brand-accent-blue mb-2" data-target={stat.target} data-suffix={stat.suffix}>0</span>
@@ -354,7 +369,7 @@ const About = () => {
               <div className="flex flex-wrap gap-4">
                 {[
                   { icon: '📚', text: 'Storytelling' },
-                  { icon: '☕', text: 'Coffee' },
+                  { icon: '☕', text: 'Ice Tea' },
                   { icon: '🎨', text: 'Design Systems' },
                   { icon: '🌍', text: 'Human Behavior' },
                   { icon: '📸', text: 'Photography' }
@@ -383,56 +398,99 @@ const About = () => {
 
       </div>
 
-      {/* --- SECTION 5: CINEMATIC HORIZONTAL SCROLL WALL (Your original content perfectly integrated) --- */}
+      {/* --- SECTION 5: CINEMATIC HORIZONTAL SCROLL WALL (Lando Norris Editorial Style) --- */}
       <section ref={horizontalRef} className="relative w-full h-screen overflow-hidden flex items-center bg-brand-blue z-20 border-t border-white/10 mt-24">
         
         <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         
-        <div ref={scrollWrapperRef} className="flex items-center gap-16 md:gap-24 px-[15vw] h-full w-max">
+        <div ref={scrollWrapperRef} className="flex items-center gap-12 md:gap-20 px-[15vw] h-full w-max">
           
-          <div className="relative w-64 md:w-80 -mt-20 transform -rotate-3 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-white text-brand-blue font-mono text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 z-10 shadow-lg">[ MUMBAI, 2024 ]</span>
-            <img src={mem1} alt="Memory 1" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 1 */}
+          <div className="relative w-36 md:w-48 -mt-32 transform -rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ MUMBAI, 2024 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem1} alt="Memory 1" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-56 md:w-[22rem] mt-48 transform rotate-2 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-white text-brand-blue font-mono text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 z-10 shadow-lg">[ LOCATION, YEAR ]</span>
-            <img src={mem2} alt="Memory 2" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2 grayscale group-hover:grayscale-0 transition-all duration-500" />
+          {/* IMAGE 2 */}
+          <div className="relative w-40 md:w-56 mt-40 transform rotate-2 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ STUDIO, YEAR ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem2} alt="Memory 2" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-80 md:w-[600px] z-20 mx-12">
+          {/* MASSIVE TYPOGRAPHY QUOTE */}
+          <div className="relative w-80 md:w-[600px] z-20 mx-8">
             <h3 className="font-poppins font-black text-4xl md:text-6xl text-white leading-[1.1] uppercase tracking-tighter mix-blend-difference">
-              "We don't remember days, <br/><span className="text-brand-accent-blue">we remember moments.</span>"
+              "We don't remember days, <br/><span className="text-[#ccff00]">we remember moments.</span>"
             </h3>
           </div>
 
-          <div className="relative w-48 md:w-64 -mt-64 transform rotate-6 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem3} alt="Memory 3" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 3 */}
+          <div className="relative w-36 md:w-48 -mt-48 transform rotate-6 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ CAFE, 2023 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem3} alt="Memory 3" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-72 md:w-96 transform -rotate-1 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem4} alt="Memory 4" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 4 */}
+          <div className="relative w-48 md:w-64 mt-16 transform -rotate-1 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ FIELD, 2024 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem4} alt="Memory 4" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-64 md:w-80 mt-32 transform rotate-3 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem5} alt="Memory 5" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 5 */}
+          <div className="relative w-32 md:w-44 mt-40 transform rotate-4 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ TRAVEL, 2023 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem5} alt="Memory 5" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-56 md:w-72 -mt-24 transform -rotate-4 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem6} alt="Memory 6" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2 grayscale group-hover:grayscale-0 transition-all duration-500" />
+          {/* IMAGE 6 */}
+          <div className="relative w-40 md:w-56 -mt-32 transform -rotate-4 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ WORKSHOP, 2025 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem6} alt="Memory 6" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-64 md:w-80 mt-12 transform rotate-1 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem7} alt="Memory 7" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 7 */}
+          <div className="relative w-36 md:w-48 mt-24 transform rotate-2 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ ARCHIVE, 2022 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem7} alt="Memory 7" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-48 md:w-64 mt-64 transform -rotate-3 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <img src={mem8} alt="Memory 8" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 8 */}
+          <div className="relative w-32 md:w-48 mt-56 transform -rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ MOMENTS, 2024 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem8} alt="Memory 8" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
-          <div className="relative w-72 md:w-[28rem] -mt-32 transform rotate-2 hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-500 ease-out cursor-none group mr-[15vw]">
-            <span className="absolute -top-3 -left-3 bg-white text-brand-blue font-mono text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 z-10 shadow-lg">[ LOCATION, YEAR ]</span>
-            <img src={mem9} alt="Memory 9" className="w-full h-auto object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white p-2" />
+          {/* IMAGE 9 */}
+          <div className="relative w-48 md:w-64 -mt-40 transform rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group mr-[15vw]">
+            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ FUTURE, 2026 ]</span>
+            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+              <img src={mem9} alt="Memory 9" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+            </div>
           </div>
 
         </div>
@@ -440,7 +498,12 @@ const About = () => {
 
       {/* Internal CSS */}
       <style dangerouslySetInnerHTML={{__html: `
-        @keyframes scan { 0% { transform: translateY(-100%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(400px); opacity: 0; } }
+        @keyframes scan { 
+          0% { transform: translateY(-100%); opacity: 0; } 
+          10% { opacity: 1; } 
+          90% { opacity: 1; } 
+          100% { transform: translateY(400px); opacity: 0; } 
+        }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
