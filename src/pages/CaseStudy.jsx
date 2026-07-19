@@ -130,7 +130,7 @@ const projectData = {
     image6: { text: "[ Detail crop showing content writing, pull quotes, or reflection prompts ]", caption: "The language was shaped with care so the content could stay clear, age-appropriate, and emotionally sensitive without becoming diluted." },
     challenges: "This project had several important constraints. We could not speak directly to the end users because of ethical concerns and the sensitivity of the subject, so we had to build the work through stakeholder insight, secondary feedback, and careful interpretation. Time and budget shaped every decision too.",
     image7: { text: "[ Simple visual block showing Accessible, Printable, Classroom-ready, and Content-led. ]", caption: "The final format worked because it respected both the sensitivity of the topic and the realities of classroom use." },
-    reflections: "This project taught me that simplicity does not mean losing depth. Sometimes the most respectful design choice is the one that removes spectacle and lets the content do the work. It also made me more aware of how budget, ethics, time, and accessibility shape what good design really looks like in practice.",
+    reflections: "This project taught me that simplicity does not mean losing depth. Sometimes the most respectful design choice is the Math that removes spectacle and lets the content do the work. It also made me more aware of how budget, ethics, time, and accessibility shape what good design really looks like in practice.",
     reflectionCards: [
       "Content-led experiences can be more powerful than highly interactive ones.",
       "Budget and access shape design just as much as creativity does.",
@@ -196,11 +196,12 @@ const projectData = {
   }
 };
 
-// --- CUSTOM BOOK SPREAD COMPONENT ---
+// --- SYNCHRONIZED BOOK SPREAD COMPONENT ---
 const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
   const [spreadIndex, setSpreadIndex] = useState(0);
   
-  const totalSpreads = Math.ceil((srcs.length + 1) / 2);
+  // NEW MATH: Page 1 is centered. Remaining pages are grouped in 2.
+  const totalSpreads = srcs.length > 0 ? 1 + Math.ceil((srcs.length - 1) / 2) : 0;
 
   const goNext = (e) => {
     e.stopPropagation();
@@ -212,50 +213,70 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
     if (spreadIndex > 0) setSpreadIndex(p => p - 1);
   };
 
+  // Logic to properly align pages 2 & 3, 4 & 5 etc.
   const leftImageIndex = spreadIndex === 0 ? -1 : (spreadIndex * 2) - 1;
   const rightImageIndex = spreadIndex === 0 ? 0 : (spreadIndex * 2);
 
   return (
     <div className="scroll-fade my-16 w-full flex flex-col group cursor-none">
       
-      {/* Outer Container (Removed the global onClick so we can split it!) */}
       <div className="relative w-full bg-[#F7F7F4] rounded-2xl border border-slate-200 shadow-inner overflow-hidden flex items-center justify-center p-4 md:p-8 transition-colors hover:bg-[#f1f1eb]">
         
         <div className="relative w-full max-w-6xl aspect-[1.4/1] flex shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)] rounded-sm bg-white">
           
-          {/* LEFT PAGE - Click to go PREVIOUS */}
-          <div 
-            onClick={goPrev}
-            className={`w-1/2 h-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors ${leftImageIndex < 0 ? 'bg-transparent cursor-default hover:bg-transparent' : 'bg-white border-r border-slate-300'}`}
-          >
-            {leftImageIndex >= 0 && srcs[leftImageIndex] && (
-              <>
-                <div className="absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
+          {spreadIndex === 0 ? (
+            /* FIX 2: PAGE 1 IS NOW PERFECTLY CENTERED */
+            <div 
+              onClick={goNext}
+              className="w-full h-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors bg-white"
+            >
+              {srcs[0] && (
                 <img 
-                  src={srcs[leftImageIndex]} 
-                  alt={`Left Page ${leftImageIndex + 1}`} 
-                  className="w-full h-full object-contain" 
+                  src={srcs[0]} 
+                  alt="Cover Page" 
+                  className="h-[95%] w-auto max-w-full object-contain drop-shadow-2xl" 
                   style={{ imageRendering: '-webkit-optimize-contrast' }} 
                 />
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          ) : (
+            /* PAGES 2 ONWARD STAGGER LEFT & RIGHT */
+            <>
+              {/* LEFT PAGE */}
+              <div 
+                onClick={goPrev}
+                className={`w-1/2 h-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors ${leftImageIndex < 0 ? 'bg-transparent cursor-default hover:bg-transparent' : 'bg-white border-r border-slate-300'}`}
+              >
+                {leftImageIndex >= 0 && srcs[leftImageIndex] && (
+                  <>
+                    <div className="absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
+                    <img 
+                      src={srcs[leftImageIndex]} 
+                      alt={`Left Page ${leftImageIndex + 1}`} 
+                      className="w-full h-full object-contain" 
+                      style={{ imageRendering: '-webkit-optimize-contrast' }} 
+                    />
+                  </>
+                )}
+              </div>
 
-          {/* RIGHT PAGE - Click to go NEXT */}
-          <div 
-            onClick={goNext}
-            className="w-1/2 h-full relative bg-white flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors"
-          >
-            <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
-            {rightImageIndex < srcs.length && srcs[rightImageIndex] && (
-              <img 
-                src={srcs[rightImageIndex]} 
-                alt={`Right Page ${rightImageIndex + 1}`} 
-                className="w-full h-full object-contain" 
-                style={{ imageRendering: '-webkit-optimize-contrast' }} 
-              />
-            )}
-          </div>
+              {/* RIGHT PAGE */}
+              <div 
+                onClick={goNext}
+                className="w-1/2 h-full relative bg-white flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-50 transition-colors"
+              >
+                <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-black/15 to-transparent z-10 pointer-events-none mix-blend-multiply"></div>
+                {rightImageIndex < srcs.length && srcs[rightImageIndex] && (
+                  <img 
+                    src={srcs[rightImageIndex]} 
+                    alt={`Right Page ${rightImageIndex + 1}`} 
+                    className="w-full h-full object-contain" 
+                    style={{ imageRendering: '-webkit-optimize-contrast' }} 
+                  />
+                )}
+              </div>
+            </>
+          )}
 
         </div>
 
@@ -308,6 +329,7 @@ const BookSpreadViewer = ({ srcs, caption, microcopy }) => {
     </div>
   );
 };
+
 const CaseStudy = () => {
   const { id } = useParams();
   const project = projectData[id] || projectData["scottish-widows"];
@@ -321,7 +343,8 @@ const CaseStudy = () => {
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId.toLowerCase());
     if (element) {
-      const offset = 120;
+      // Increased offset to 160px so it perfectly clears BOTH the main Navbar and the Sticky progress bar
+      const offset = 160; 
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -407,10 +430,13 @@ const CaseStudy = () => {
     : 'grid-cols-1 md:grid-cols-3';
 
   return (
-    <div ref={pageRef} className="pb-24"> 
+    <div ref={pageRef} className="w-full min-h-screen bg-white text-slate-900 pb-24"> 
       
-      {/* WATER-FILL STICKY PROGRESS BAR - SEPARATED BUTTONS */}
-      <div className="sticky top-[65px] -mt-10 md:-mt-12 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full">
+      {/* FIX 1: INVISIBLE SPACER TO PREVENT NAVBAR OVERLAP */}
+      <div className="w-full pointer-events-none" style={{ height: '100px' }} aria-hidden="true"></div>
+
+      {/* WATER-FILL STICKY PROGRESS BAR - NO NEGATIVE MARGIN */}
+      <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full transition-all">
         <div className="max-w-4xl mx-auto flex gap-2 md:gap-3 h-10 md:h-12">
           {sections.map((sec, index) => {
             const sectionSpan = 100 / sections.length;
@@ -434,7 +460,6 @@ const CaseStudy = () => {
                     willChange: 'transform'
                   }}
                 >
-                  {/* Subtle inner gradient to make the water look deep without changing the edges */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"></div>
                 </div>
 
@@ -451,7 +476,7 @@ const CaseStudy = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 md:px-12 pt-16">
+      <div className="max-w-4xl mx-auto px-6 md:px-12 pt-12">
         
         {/* HEADER */}
         <div className="animate-up mb-16 text-center">

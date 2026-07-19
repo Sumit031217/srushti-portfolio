@@ -2,8 +2,9 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// IMPORT YOUR PROFILE AND MEMORY PHOTOS
 import profilePhoto from '../assets/srushti.png';
+
+// ALL 15 MEMORY PHOTOS
 import mem1 from '../assets/mem-1.jpg';
 import mem2 from '../assets/mem-2.jpg';
 import mem3 from '../assets/mem-3.jpg';
@@ -13,6 +14,34 @@ import mem6 from '../assets/mem-6.jpg';
 import mem7 from '../assets/mem-7.jpg';
 import mem8 from '../assets/mem-8.jpg';
 import mem9 from '../assets/mem-9.jpg';
+import mem10 from '../assets/mem-10.jpg';
+import mem11 from '../assets/mem-11.jpg';
+import mem12 from '../assets/mem-12.jpg';
+import mem13 from '../assets/mem-13.jpg';
+import mem14 from '../assets/mem-14.jpg';
+import mem15 from '../assets/mem-15.jpg';
+
+// ALL 20 NATURE PHOTOS
+import nat1 from '../assets/nat-1.jpg';
+import nat2 from '../assets/nat-2.jpg';
+import nat3 from '../assets/nat-3.jpg';
+import nat4 from '../assets/nat-4.jpg';
+import nat5 from '../assets/nat-5.jpg';
+import nat6 from '../assets/nat-6.jpg';
+import nat7 from '../assets/nat-7.jpg';
+import nat8 from '../assets/nat-8.jpg';
+import nat9 from '../assets/nat-9.jpg';
+import nat10 from '../assets/nat-10.jpg';
+import nat11 from '../assets/nat-11.jpg';
+import nat12 from '../assets/nat-12.jpg';
+import nat13 from '../assets/nat-13.jpg';
+import nat14 from '../assets/nat-14.jpg';
+import nat15 from '../assets/nat-15.jpg';
+import nat16 from '../assets/nat-16.jpg';
+import nat17 from '../assets/nat-17.jpg';
+import nat18 from '../assets/nat-18.jpg';
+import nat19 from '../assets/nat-19.jpg';
+import nat20 from '../assets/nat-20.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,11 +59,9 @@ const About = () => {
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
       
-      // Spotlight & Sun Cursor coordinates
       containerRef.current.style.setProperty('--mouse-x', `${clientX}px`);
       containerRef.current.style.setProperty('--mouse-y', `${clientY}px`);
 
-      // 3D Tilt calculation (subtle)
       const tiltX = ((clientY / innerHeight) - 0.5) * 15;
       const tiltY = ((clientX / innerWidth) - 0.5) * -15;
       containerRef.current.style.setProperty('--tilt-x', `${tiltX}deg`);
@@ -64,7 +91,7 @@ const About = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // --- MINI TERMINAL LOGIC (Service Design Focused) ---
+  // --- MINI TERMINAL LOGIC ---
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
     { type: 'output', text: 'Srushti.OS v2.0.0 loaded.' },
@@ -101,7 +128,6 @@ const About = () => {
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
       
-      // 1. Cinematic Opening
       gsap.fromTo(".char-reveal", 
         { opacity: 0, y: 20 }, 
         { opacity: 1, y: 0, stagger: 0.05, duration: 1, ease: "power4.out", delay: 0.2 }
@@ -111,7 +137,6 @@ const About = () => {
         { scaleX: 0 }, { scaleX: 1, duration: 1.5, ease: "expo.inOut", delay: 0.8 }
       );
 
-      // 2. Timeline Scroll Animation
       const timelineNodes = gsap.utils.toArray('.timeline-node');
       timelineNodes.forEach((node, i) => {
         gsap.fromTo(node,
@@ -120,7 +145,6 @@ const About = () => {
         );
       });
 
-      // 3. Animated Statistics Counters
       const counters = gsap.utils.toArray('.stat-counter');
       counters.forEach(counter => {
         const target = parseFloat(counter.getAttribute('data-target'));
@@ -133,11 +157,10 @@ const About = () => {
         );
       });
 
-      // 4. Floating Elements (Icons & Images)
       gsap.to(".float-slow", { y: -15, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
       gsap.to(".float-fast", { y: -8, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 0.5 });
 
-      // 5. THE HORIZONTAL SCROLL MEMORY WALL
+      // THE HORIZONTAL SCROLL MEMORY WALL (Updated for 15 photos)
       const wrapper = scrollWrapperRef.current;
       if (wrapper) {
         const totalScroll = wrapper.scrollWidth - window.innerWidth;
@@ -155,12 +178,23 @@ const About = () => {
         });
       }
 
+      // NATURE WALL PARALLAX FADE-IN
+      gsap.utils.toArray('.nature-photo').forEach((photo) => {
+        gsap.fromTo(photo,
+          { y: 100, opacity: 0, scale: 0.9 },
+          { scrollTrigger: { trigger: photo, start: "top 90%" }, y: 0, opacity: 1, scale: 1, duration: 1, ease: "power3.out" }
+        );
+      });
+
     }, containerRef);
     return () => ctx.revert();
   }, []);
 
   const bgStyle = theme === 'light' ? 'bg-[#F8F9FA] text-brand-blue' : 'bg-[#050505] text-slate-200';
   const glassStyle = theme === 'light' ? 'bg-white/40 border-slate-200/50' : 'bg-white/5 border-white/10';
+
+  const memories = [mem1, mem2, mem3, mem4, mem5, mem6, mem7, mem8, mem9, mem10, mem11, mem12, mem13, mem14, mem15];
+  const naturePhotos = [nat1, nat2, nat3, nat4, nat5, nat6, nat7, nat8, nat9, nat10, nat11, nat12, nat13, nat14, nat15, nat16, nat17, nat18, nat19, nat20];
 
   return (
     <div 
@@ -169,24 +203,19 @@ const About = () => {
       style={{ '--mouse-x': '50vw', '--mouse-y': '50vh', '--tilt-x': '0deg', '--tilt-y': '0deg' }}
     >
       
-      {/* --- CUSTOM SUN CURSOR --- */}
+      {/* CUSTOM SUN CURSOR */}
       <div 
         className="pointer-events-none fixed z-[99999] transition-transform duration-75 mix-blend-screen"
         style={{
-          left: 'var(--mouse-x)',
-          top: 'var(--mouse-y)',
-          width: '150px',
-          height: '150px',
+          left: 'var(--mouse-x)', top: 'var(--mouse-y)', width: '150px', height: '150px',
           transform: 'translate(-50%, -50%)',
           background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,230,0,0.8) 15%, rgba(255,100,0,0.4) 40%, transparent 70%)',
           filter: 'blur(4px)',
         }}
       ></div>
 
-      {/* --- BULLETPROOF SPACER --- */}
       <div className="h-32 w-full block pointer-events-none"></div>
 
-      {/* --- BACKGROUND EFFECTS --- */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className={`absolute inset-0 opacity-40 mix-blend-${theme === 'light' ? 'multiply' : 'screen'}`} style={{ background: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(124,58,237,0.12), transparent 40%)` }}></div>
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
@@ -195,13 +224,10 @@ const About = () => {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
 
-        {/* --- SECTION 1: WHO AM I (Glass Card Intro) --- */}
         <section className="min-h-[80vh] flex flex-col justify-center mb-32 relative pt-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left: Glass Card Intro */}
             <div className="lg:col-span-7 transform-gpu" style={{ transform: 'rotateX(var(--tilt-x)) rotateY(var(--tilt-y))', transformStyle: 'preserve-3d' }}>
-              
               <h1 className={`font-poppins text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6 flex flex-wrap ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>
                 {'Designing'.split('').map((char, i) => <span key={i} className="char-reveal block">{char}</span>)}
                 <span className="w-4"></span>
@@ -209,17 +235,12 @@ const About = () => {
                 <span className="w-4"></span>
                 {'Future.'.split('').map((char, i) => <span key={i} className="char-reveal block text-brand-accent-blue">{char}</span>)}
               </h1>
-              
               <div className="grow-line h-[2px] w-full bg-gradient-to-r from-brand-accent-blue to-transparent mb-8 origin-left"></div>
-
               <div className={`backdrop-blur-xl ${glassStyle} p-8 rounded-2xl shadow-2xl relative overflow-hidden group`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-accent-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                
                 <p className={`text-lg md:text-xl font-light leading-relaxed relative z-10 ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}>
                   I have always been drawn to stories—the ones people tell, the ones systems hide, and the ones design can bring to life. From journalism and media to <span className={`font-semibold ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>service design and strategy</span>, my work has grown around one core belief: when you understand people deeply, you can create experiences that feel clearer, kinder, and more meaningful.
                 </p>
-                
-                {/* Animated Keywords */}
                 <div className="mt-8 flex flex-wrap gap-3 relative z-10">
                   {['Service Designer', 'UX Strategist', 'Storyteller', 'Systems Thinker'].map((word, i) => (
                     <span key={i} className={`px-4 py-2 text-xs font-mono uppercase tracking-widest ${glassStyle} rounded-full hover:bg-brand-accent-blue hover:text-white transition-all duration-300 hover:scale-105 cursor-none hover:border-brand-accent-blue`}>
@@ -230,15 +251,12 @@ const About = () => {
               </div>
             </div>
 
-            {/* Right: Interactive 3D Profile Image */}
             <div className="lg:col-span-5 flex justify-center float-slow relative group">
               <div className="absolute inset-0 bg-brand-accent-blue/20 blur-[60px] rounded-full group-hover:bg-brand-accent-blue/40 group-hover:scale-125 transition-all duration-700 -z-10"></div>
-              
               <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full p-2 bg-gradient-to-tr from-brand-accent-blue to-transparent transform-gpu group-hover:rotate-6 transition-transform duration-700 cursor-none">
                 <div className="w-full h-full rounded-full overflow-hidden bg-brand-blue relative">
                   <img src={profilePhoto} alt="Srushti" className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-110 transition-all duration-700" />
-                  {/* Photo Scanner Line */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/50 blur-sm -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite]"></div>
+                  <div className="absolute top-0 left-0 w-full h-1 bg-[#ccff00]/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
                 </div>
               </div>
             </div>
@@ -246,7 +264,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* --- SECTION 2: INTERACTIVE SKILL GALAXY (UX Focused & Neon Rings) --- */}
+        {/* NEON SKILL GALAXY */}
         <section className="py-24 relative flex flex-col items-center justify-center min-h-[70vh]">
           <h2 className={`font-poppins text-3xl font-bold uppercase tracking-widest mb-24 text-center ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>
             Skill <span className="text-brand-accent-blue">Universe</span>
@@ -254,23 +272,19 @@ const About = () => {
 
           <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] flex items-center justify-center float-fast">
             
-            {/* Center Node */}
             <div className={`absolute w-28 h-28 backdrop-blur-md border border-brand-accent-blue rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(124,58,237,0.3)] z-20 cursor-none hover:scale-110 transition-transform ${glassStyle}`}>
               <span className={`font-mono text-xs font-bold tracking-widest text-center ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>SERVICE<br/>DESIGN</span>
             </div>
 
-            {/* Orbit 1: Strategy (Neon Cyan) */}
             <div className="absolute w-full h-full rounded-full animate-[spin_25s_linear_infinite] border-2 border-[#00f3ff] shadow-[0_0_30px_rgba(0,243,255,0.4),inset_0_0_30px_rgba(0,243,255,0.4)]">
               <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 backdrop-blur-sm border rounded-full flex items-center justify-center animate-[spin_25s_linear_infinite_reverse] hover:bg-brand-accent-blue hover:text-white hover:scale-125 transition-all cursor-none group ${glassStyle}`}>
                 <span className="font-mono text-[10px] text-center font-bold">Journey<br/>Mapping</span>
-                <div className="absolute top-full mt-2 w-max px-3 py-1 bg-brand-blue text-white text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity">Ecosystem Analysis</div>
               </div>
               <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-20 h-20 backdrop-blur-sm border rounded-full flex items-center justify-center animate-[spin_25s_linear_infinite_reverse] hover:bg-brand-accent-blue hover:text-white hover:scale-125 transition-all cursor-none group ${glassStyle}`}>
                 <span className="font-mono text-[10px] text-center font-bold">Insight<br/>Synthesis</span>
               </div>
             </div>
 
-            {/* Orbit 2: Execution (Neon Purple Counter-rotating) */}
             <div className="absolute w-[65%] h-[65%] rounded-full animate-[spin_18s_linear_infinite_reverse] border-2 border-[#b026ff] shadow-[0_0_30px_rgba(176,38,255,0.4),inset_0_0_30px_rgba(176,38,255,0.4)]">
               <div className={`absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-20 h-20 backdrop-blur-sm border rounded-full flex items-center justify-center animate-[spin_18s_linear_infinite] hover:bg-brand-accent-blue hover:text-white hover:scale-125 transition-all cursor-none group ${glassStyle}`}>
                 <span className="font-mono text-[10px] text-center font-bold">UX<br/>Strategy</span>
@@ -283,7 +297,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* --- SECTION 3: THE JOURNEY ROADMAP --- */}
+        {/* ROADMAP */}
         <section className="py-24 relative">
           <h2 className={`font-poppins text-3xl font-bold uppercase tracking-widest mb-16 text-center ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>
             The <span className="text-brand-accent-blue">Roadmap</span>
@@ -311,11 +325,10 @@ const About = () => {
           </div>
         </section>
 
-        {/* --- SECTION 4: MINI TERMINAL, STATS & RECRUITER HIGHLIGHTS --- */}
+        {/* TERMINAL & STATS */}
         <section className="py-24">
-          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Animated Stats (Updated to your preferences) */}
+            
             <div className="grid grid-cols-2 gap-6">
               {[
                 { label: 'Ice Tea Consumed', target: '999', suffix: '+' },
@@ -330,7 +343,6 @@ const About = () => {
               ))}
             </div>
 
-            {/* Interactive Terminal */}
             <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden shadow-2xl flex flex-col h-[350px]">
               <div className="bg-white/5 px-4 py-2 flex items-center gap-2 border-b border-white/10">
                 <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
@@ -362,7 +374,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* Things I Love & Why Work With Me */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className={`backdrop-blur-md ${glassStyle} p-8 rounded-xl shadow-lg`}>
               <h3 className={`font-poppins text-xl font-bold uppercase tracking-widest mb-6 ${theme === 'light' ? 'text-brand-blue' : 'text-white'}`}>Things I <span className="text-brand-accent-blue">Love</span></h3>
@@ -393,110 +404,78 @@ const About = () => {
               </div>
             </div>
           </div>
-
         </section>
-
       </div>
 
-      {/* --- SECTION 5: CINEMATIC HORIZONTAL SCROLL WALL (Lando Norris Editorial Style) --- */}
-      <section ref={horizontalRef} className="relative w-full h-screen overflow-hidden flex items-center bg-brand-blue z-20 border-t border-white/10 mt-24">
-        
+      {/* --- 15 PHOTO MEMORY WALL --- */}
+      <section ref={horizontalRef} className="relative w-full h-screen overflow-hidden flex items-center bg-brand-blue z-20 border-t border-white/10 mt-12">
         <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         
         <div ref={scrollWrapperRef} className="flex items-center gap-12 md:gap-20 px-[15vw] h-full w-max">
+          {memories.map((mem, i) => {
+            const rotate = i % 2 === 0 ? `rotate-${(i%4)+1}` : `-rotate-${(i%3)+2}`;
+            const marginTop = i % 2 === 0 ? (i%3 === 0 ? '-mt-32' : 'mt-40') : (i%4 === 0 ? '-mt-48' : 'mt-24');
+            const width = i % 3 === 0 ? 'w-48 md:w-64' : (i % 2 === 0 ? 'w-40 md:w-56' : 'w-36 md:w-48');
+
+            return (
+              <React.Fragment key={i}>
+                <div className={`relative ${width} ${marginTop} transform ${rotate} hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group`}>
+                  <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">
+                    [ MEMORY {i+1} ]
+                  </span>
+                  <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+                    <img src={mem} alt={`Memory ${i+1}`} className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-[#ccff00]/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+                  </div>
+                </div>
+
+                {i === 7 && (
+                  <div className="relative w-80 md:w-[600px] z-20 mx-8">
+                    <h3 className="font-poppins font-black text-4xl md:text-6xl text-white leading-[1.1] uppercase tracking-tighter mix-blend-difference">
+                      "We don't remember days, <br/><span className="text-[#ccff00]">we remember moments.</span>"
+                    </h3>
+                  </div>
+                )}
+              </React.Fragment>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* --- 20 PHOTO NATURE MASONRY WALL --- */}
+      <section className="py-32 relative bg-[#050505] z-10">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           
-          {/* IMAGE 1 */}
-          <div className="relative w-36 md:w-48 -mt-32 transform -rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ MUMBAI, 2024 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem1} alt="Memory 1" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
+          <div className="text-center mb-24">
+            <h2 className="font-poppins text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">
+              The <span className="text-brand-accent-blue">World</span> Through My Lens.
+            </h2>
+            <p className="font-montserrat text-slate-400 font-light max-w-2xl mx-auto">
+              Nature, architecture, and the quiet beauties of the world captured over time.
+            </p>
           </div>
 
-          {/* IMAGE 2 */}
-          <div className="relative w-40 md:w-56 mt-40 transform rotate-2 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ STUDIO, YEAR ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem2} alt="Memory 2" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+            {naturePhotos.map((nat, i) => (
+              <div key={i} className="nature-photo break-inside-avoid relative group overflow-hidden bg-white/5 p-2 border border-white/10 hover:border-brand-accent-blue/50 transition-colors duration-500 cursor-none rounded-sm">
+                
+                <div className="relative overflow-hidden">
+                  <img src={nat} alt={`Nature ${i+1}`} className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-[#ccff00]/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
+                </div>
 
-          {/* MASSIVE TYPOGRAPHY QUOTE */}
-          <div className="relative w-80 md:w-[600px] z-20 mx-8">
-            <h3 className="font-poppins font-black text-4xl md:text-6xl text-white leading-[1.1] uppercase tracking-tighter mix-blend-difference">
-              "We don't remember days, <br/><span className="text-[#ccff00]">we remember moments.</span>"
-            </h3>
-          </div>
-
-          {/* IMAGE 3 */}
-          <div className="relative w-36 md:w-48 -mt-48 transform rotate-6 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ CAFE, 2023 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem3} alt="Memory 3" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 4 */}
-          <div className="relative w-48 md:w-64 mt-16 transform -rotate-1 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ FIELD, 2024 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem4} alt="Memory 4" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 5 */}
-          <div className="relative w-32 md:w-44 mt-40 transform rotate-4 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ TRAVEL, 2023 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem5} alt="Memory 5" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 6 */}
-          <div className="relative w-40 md:w-56 -mt-32 transform -rotate-4 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ WORKSHOP, 2025 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem6} alt="Memory 6" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 7 */}
-          <div className="relative w-36 md:w-48 mt-24 transform rotate-2 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ ARCHIVE, 2022 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem7} alt="Memory 7" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 8 */}
-          <div className="relative w-32 md:w-48 mt-56 transform -rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ MOMENTS, 2024 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem8} alt="Memory 8" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
-          </div>
-
-          {/* IMAGE 9 */}
-          <div className="relative w-48 md:w-64 -mt-40 transform rotate-3 hover:rotate-0 hover:scale-125 hover:z-50 transition-all duration-500 ease-out cursor-none group mr-[15vw]">
-            <span className="absolute -top-3 -left-3 bg-[#ccff00] text-black font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 z-20 shadow-sm">[ FUTURE, 2026 ]</span>
-            <div className="relative overflow-hidden bg-white p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-              <img src={mem9} alt="Memory 9" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-              <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent-blue/80 blur-[2px] -translate-y-full group-hover:animate-[scan_2s_ease-in-out_infinite] z-30"></div>
-            </div>
+                <div className="absolute bottom-4 left-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="bg-black/80 backdrop-blur-md text-[#ccff00] font-mono text-[9px] uppercase tracking-widest font-bold px-2 py-1 shadow-sm border border-[#ccff00]/30">
+                    NATURE_{String(i+1).padStart(2, '0')}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
       </section>
 
-      {/* Internal CSS */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scan { 
           0% { transform: translateY(-100%); opacity: 0; } 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import Lenis from '@studio-freight/lenis';
+import { useLocation } from 'react-router-dom';
 
 export const GlobalLayout = ({ children }) => {
   const cursorRef = useRef(null);
@@ -8,6 +9,13 @@ export const GlobalLayout = ({ children }) => {
   const preloaderRef = useRef(null);
   const textRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // --- SCROLL BUG FIX ---
+  // This detects when you change pages and forces the window back to the top
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   // 1. LENIS SMOOTH SCROLLING (60 FPS Inertia)
   useEffect(() => {
@@ -53,34 +61,37 @@ export const GlobalLayout = ({ children }) => {
         ease: "power4.out"
       });
     };
+
     const handleHover = () => {
-        gsap.to(followerRef.current, {
-          scale: 1.8, // A tight, precise lens size
-          backgroundColor: "#ffffff", // Pure white...
-          mixBlendMode: "difference", // ...forces a perfect, sharp inversion of whatever is behind it
-          borderColor: "transparent", // Removes the ring for a clean dot
-          duration: 0.3,
-          ease: "power3.out"
-        });
-        // Shrink the inner dot away cleanly
-        gsap.to(cursorRef.current, { scale: 0, opacity: 0, duration: 0.2 }); 
-      };
+      gsap.to(followerRef.current, {
+        scale: 1.8, // A tight, precise lens size
+        backgroundColor: "#ffffff", // Pure white...
+        mixBlendMode: "difference", // ...forces a perfect, sharp inversion of whatever is behind it
+        borderColor: "transparent", // Removes the ring for a clean dot
+        duration: 0.3,
+        ease: "power3.out"
+      });
+      // Shrink the inner dot away cleanly
+      gsap.to(cursorRef.current, { scale: 0, opacity: 0, duration: 0.2 }); 
+    };
   
-      const handleHoverOut = () => {
-        gsap.to(followerRef.current, {
-          scale: 1,
-          backgroundColor: "transparent",
-          mixBlendMode: "normal",
-          borderColor: "rgba(124, 58, 237, 0.5)", // Brings back your purple outline
-          duration: 0.3,
-          ease: "power3.out"
-        });
-        // Bring the inner dot back
-        gsap.to(cursorRef.current, { scale: 1, opacity: 1, duration: 0.2 }); 
-      };
+    const handleHoverOut = () => {
+      gsap.to(followerRef.current, {
+        scale: 1,
+        backgroundColor: "transparent",
+        mixBlendMode: "normal",
+        borderColor: "rgba(124, 58, 237, 0.5)", // Brings back your purple outline
+        duration: 0.3,
+        ease: "power3.out"
+      });
+      // Bring the inner dot back
+      gsap.to(cursorRef.current, { scale: 1, opacity: 1, duration: 0.2 }); 
+    };
+
     window.addEventListener('mousemove', moveCursor);
 
     // Attach hover effects to all interactive elements
+    // Added location.pathname to the dependency array so it re-binds the hover effects when you change pages!
     const interactives = document.querySelectorAll('a, button, input, .cursor-pointer, .hover-target');
     interactives.forEach(el => {
       el.addEventListener('mouseenter', handleHover);
@@ -94,7 +105,7 @@ export const GlobalLayout = ({ children }) => {
         el.removeEventListener('mouseleave', handleHoverOut);
       });
     };
-  }, [isLoading]); // Re-bind when loading finishes
+  }, [isLoading, location.pathname]); 
 
   // 3. CINEMATIC PRELOADER SEQUENCE
   useEffect(() => {

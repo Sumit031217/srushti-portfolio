@@ -24,7 +24,7 @@ const Hero = () => {
           Available for Opportunities // London & Glasgow
         </span>
         <h1 className="fade-in font-poppins text-4xl md:text-5xl font-bold tracking-tight text-brand-blue leading-none">
-          Srushti Pagariya
+          Srushti   Pagariya
         </h1>
         <h2 className="fade-in font-poppins text-xl md:text-3xl text-gray-500 font-light mt-2">
           Service Designer &bull; UX Researcher &bull; Creative Strategist

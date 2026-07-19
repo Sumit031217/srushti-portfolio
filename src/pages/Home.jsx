@@ -17,35 +17,22 @@ const Home = () => {
   const textSectionRef = useRef(null);
   
   const [loadingComplete, setLoadingComplete] = useState(false);
-  const [loadingText, setLoadingText] = useState('🌍 Welcome to Srushti');
 
-  // --- 1. LUXURY GREETING LOADER SEQUENCE ---
+  // --- FAST LOADER ---
   useEffect(() => {
-    const sequences = [
-      { text: '🌍 Welcome to Srushti', delay: 1000 },
-      { text: '✨ Where Ideas Take Shape', delay: 2400 },
-      { text: '🚀 Explore the Journey', delay: 3800 }
-    ];
-
-    sequences.forEach((seq, index) => {
-      setTimeout(() => {
-        setLoadingText(seq.text);
-        if (index === sequences.length - 1) {
-          setTimeout(() => {
-            gsap.to(".luxury-loader", {
-              opacity: 0,
-              y: -50,
-              duration: 1,
-              ease: "power4.inOut",
-              onComplete: () => setLoadingComplete(true)
-            });
-          }, 1200);
-        }
-      }, seq.delay);
-    });
+    const timer = setTimeout(() => {
+      gsap.to(".luxury-loader", {
+        opacity: 0,
+        y: -50,
+        duration: 0.8,
+        ease: "power3.inOut",
+        onComplete: () => setLoadingComplete(true)
+      });
+    }, 1200);
+    return () => clearTimeout(timer);
   }, []);
 
-  // --- 2. DYNAMIC LIGHTING & MOUSE SPOTLIGHT ENGINE ---
+  // --- DYNAMIC LIGHTING & MOUSE SPOTLIGHT ENGINE ---
   useEffect(() => {
     if (!loadingComplete) return;
 
@@ -58,7 +45,6 @@ const Home = () => {
       heroRef.current.style.setProperty('--mouse-x', `${x * 100}%`);
       heroRef.current.style.setProperty('--mouse-y', `${y * 100}%`);
 
-      // Gentle interactive rotation on the 3D Globe based on cursor position
       if (globeRef.current) {
         const moveX = (x - 0.5) * 30;
         const moveY = (y - 0.5) * -30;
@@ -75,12 +61,11 @@ const Home = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [loadingComplete]);
 
-  // --- 3. HIGH-END GSAP TEXT & LAYER REVEALS ---
+  // --- GSAP TEXT REVEALS ---
   useLayoutEffect(() => {
     if (!loadingComplete) return;
 
     let ctx = gsap.context(() => {
-      // Split lines character layout reveal
       gsap.fromTo(".char-reveal span", 
         { y: '100%', rotate: 3 }, 
         { y: '0%', rotate: 0, stagger: 0.03, duration: 1.4, ease: "expo.out" }
@@ -91,7 +76,6 @@ const Home = () => {
         { opacity: 1, y: 0, stagger: 0.15, duration: 1.2, ease: "power3.out", delay: 0.4 }
       );
 
-      // Line-by-line Philosophy reveal via scroll
       gsap.utils.toArray('.scroll-line-reveal').forEach((line) => {
         gsap.fromTo(line, 
           { opacity: 0, y: 20, filter: "blur(4px)" },
@@ -99,7 +83,6 @@ const Home = () => {
         );
       });
 
-      // Selected Work cards reveal
       gsap.utils.toArray('.scroll-anim').forEach((element) => {
         gsap.fromTo(element, 
           { y: 60, opacity: 0 }, 
@@ -120,29 +103,24 @@ const Home = () => {
   return (
     <main ref={pageRef} className="w-full overflow-hidden bg-white text-brand-blue selection:bg-brand-accent-blue selection:text-white">
       
-      {/* --- LUXURY SEQUENTIAL INTRO LOADING SCREEN --- */}
       {!loadingComplete && (
         <div className="luxury-loader fixed inset-0 z-[99999] bg-brand-blue flex flex-col items-center justify-center transition-all duration-500">
           <div className="text-center">
             <h2 className="font-poppins font-light text-white text-xl md:text-2xl tracking-[0.2em] mb-4 animate-pulse">
-              {loadingText}
+              Initialising Srushti...
             </h2>
             <div className="w-48 h-[1px] bg-white/20 mx-auto overflow-hidden relative">
-              <div className="absolute top-0 left-0 h-full w-1/2 bg-brand-accent-blue animate-[loadingBar_1.5s_infinite_ease-in-out]"></div>
+              <div className="absolute top-0 left-0 h-full w-1/2 bg-brand-accent-blue animate-[loadingBar_1s_infinite_ease-in-out]"></div>
             </div>
           </div>
         </div>
       )}
 
-      {/* --- CINEMATIC HERO ENVIRONMENT --- */}
       <section 
         ref={heroRef}
         className="relative min-h-screen pt-32 pb-24 flex items-center overflow-hidden"
-        style={{
-          background: 'radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124,58,237,0.06) 0%, transparent 50%)'
-        }}
+        style={{ background: 'radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124,58,237,0.06) 0%, transparent 50%)' }}
       >
-        {/* Cosmos Layer: Starfield Overlay & Subtle Moving Grid */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
           <div className="absolute top-0 left-0 w-full h-full opacity-30" style={{ backgroundImage: 'radial-gradient(rgba(124,58,237,0.1) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -150,7 +128,6 @@ const Home = () => {
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
-          {/* LEFT COLUMN: HERO HEADERS & DISCOVERY PANEL */}
           <div className="lg:col-span-6 flex flex-col items-start">
             <div className="hero-fade mb-6">
               <span className="px-4 py-1.5 bg-brand-accent-blue/10 border border-brand-accent-blue/20 text-brand-accent-blue text-[10px] font-mono uppercase tracking-[0.25em] font-bold rounded-full shadow-sm">
@@ -167,7 +144,6 @@ const Home = () => {
               Combining strategy, systematic research, and elegant visual design to mold interactive experiences out of raw ideas. Where imagination meets execution.
             </p>
 
-            {/* Interactive Glassmorphism Navigation Actions */}
             <div className="hero-fade relative z-20 w-full max-w-lg">
               <div className="bg-white/70 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-slate-200/60 p-2 flex items-center justify-between group hover:border-brand-accent-blue/30 transition-all duration-500">
                 <div className="flex items-center gap-3 pl-4 text-slate-400 group-hover:text-brand-accent-blue transition-colors duration-300">
@@ -181,10 +157,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: REFINED 3D EARTH Visual Centerpiece */}
           <div className="lg:col-span-6 flex justify-center items-center relative h-[500px]">
-            
-            {/* Curved Orbiting Typography Halo Ring */}
             <div className="absolute w-[360px] h-[360px] md:w-[460px] md:h-[460px] rounded-full border border-dashed border-brand-accent-blue/20 animate-[spin_40s_linear_infinite] pointer-events-none z-0 flex items-center justify-center">
               <svg className="w-full h-full absolute inset-0" viewBox="0 0 100 100">
                 <path id="circlePath" d="M 50, 50 m -43, 0 a 43,43 0 1,1 86,0 a 43,43 0 1,1 -86,0" fill="none" />
@@ -194,50 +167,50 @@ const Home = () => {
               </svg>
             </div>
 
-            {/* Orbiting Tiny Cosmic Satellites */}
             <div className="absolute w-[300px] h-[300px] md:w-[380px] md:h-[380px] rounded-full animate-[spin_12s_linear_infinite] pointer-events-none z-10">
               <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-brand-accent-blue shadow-[0_0_10px_#7c3aed]"></div>
             </div>
 
-            {/* Interactive 3D Earth Object */}
+            {/* THE FLAWLESS 3D EARTH FIX: Natural colors, and exact 400% width math so the 2:1 image never stretches. */}
             <div 
               ref={globeRef}
-              className="relative w-64 h-64 md:w-80 md:h-80 rounded-full shadow-[0_25px_60px_rgba(0,0,0,0.15)] group transition-transform duration-700 overflow-hidden bg-[#0d1b2a] z-10 transform-gpu"
+              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full shadow-[0_20px_50px_rgba(124,58,237,0.15)] group transition-transform duration-700 overflow-hidden bg-[#000000] z-10 transform-gpu"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              {/* Atmospheric Soft Internal Glow Shield */}
-              <div className="absolute inset-0 rounded-full border border-white/10 shadow-[inset_0_0_40px_rgba(255,255,255,0.1),inset_-20px_-20px_50px_rgba(0,0,0,0.8)] z-30 pointer-events-none"></div>
+              {/* 1. Heavy stationary inner shadow creates the 3D volume illusion */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_-30px_-30px_50px_rgba(0,0,0,0.95),inset_10px_10px_30px_rgba(255,255,255,0.3)] z-30 pointer-events-none border border-white/10"></div>
               
-              {/* Real-world Atmospheric Gradient Halo Ring */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-brand-accent-blue/10 to-brand-accent-blue/20 mix-blend-screen opacity-70 z-20 pointer-events-none"></div>
+              {/* 2. Srushti Brand Atmospheric Glow Ring */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_20px_rgba(124,58,237,0.5)] mix-blend-screen z-20 pointer-events-none"></div>
 
-              {/* Seamless Panoramic Earth Map Layer */}
+              {/* 3. The Flat Map - Width is 400% to fit exactly 2 perfect 2:1 maps side-by-side. 
+                   NO hue-rotate filter so the earth stays naturally beautiful. */}
               <div 
-                className="absolute inset-0 w-[200%] h-full opacity-60 mix-blend-lightbox bg-repeat-x animate-[earthRotate_25s_linear_infinite] z-10 pointer-events-none"
+                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_30s_linear_infinite] z-10 pointer-events-none opacity-90"
                 style={{
-                  backgroundImage: `url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=1200&q=80')`,
-                  backgroundSize: 'contain'
+                  backgroundImage: `url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg')`,
+                  backgroundSize: '50% 100%',
+                  backgroundRepeat: 'repeat-x',
                 }}
               ></div>
 
-              {/* Flowing Floating Clouds Layer */}
+              {/* 4. Clouds Layer - Spinning slightly faster for 3D parallax depth */}
               <div 
-                className="absolute inset-0 w-[200%] h-full opacity-30 mix-blend-screen bg-repeat-x animate-[earthRotate_18s_linear_infinite] z-20 pointer-events-none"
+                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_20s_linear_infinite] z-20 pointer-events-none opacity-60 mix-blend-screen"
                 style={{
-                  backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Cloud_forest_in_the_cloud.jpg/1200px-Cloud_forest_in_the_cloud.jpg')`,
-                  backgroundSize: 'cover'
+                  backgroundImage: `url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_clouds_1024.png')`,
+                  backgroundSize: '50% 100%',
+                  backgroundRepeat: 'repeat-x'
                 }}
               ></div>
             </div>
 
-            {/* Soft Cosmic Shadow Drop Base */}
             <div className="absolute bottom-10 w-64 h-6 bg-slate-900/5 blur-xl rounded-full z-0 pointer-events-none"></div>
 
           </div>
         </div>
       </section>
 
-      {/* --- SECTION 2: THE PHILOSOPHY OF SRUSHTI --- */}
       <section ref={textSectionRef} className="py-32 relative bg-slate-50 border-y border-slate-200/40">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="scroll-line-reveal font-poppins text-xs font-bold uppercase tracking-[0.3em] text-brand-accent-blue mb-6">
@@ -252,10 +225,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* --- SECTION 3: SELECTED WORKS GRID --- */}
       <section className="py-32 relative bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          
           <div className="scroll-anim mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h3 className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-brand-accent-blue mb-4 flex items-center gap-4">
@@ -271,11 +242,9 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {projects.map((project, idx) => (
               <Link to={`/case-study/${project.id}`} key={idx} className="scroll-anim group flex flex-col h-full bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_25px_60px_rgba(124,58,237,0.08)] hover:-translate-y-2 transition-all duration-500 overflow-hidden cursor-none">
-                
                 <div className="h-64 bg-slate-50 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-blue/5 group-hover:bg-transparent z-10 transition-colors duration-500"></div>
                   <img src={project.image} alt={project.title} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)]" />
-                  
                   <div className="absolute top-4 left-4 z-20">
                     <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md text-brand-blue text-[9px] font-mono uppercase tracking-widest font-bold rounded-sm shadow-sm">
                       {project.tag}
@@ -287,7 +256,6 @@ const Home = () => {
                   <div className="absolute top-0 right-8 -mt-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.04)] border border-slate-100 group-hover:bg-brand-accent-blue group-hover:text-white text-slate-400 transition-all duration-500 z-20">
                     <svg className="w-5 h-5 transform group-hover:rotate-45 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                   </div>
-                  
                   <h4 className="font-poppins text-2xl font-bold text-brand-blue mb-3 group-hover:text-brand-accent-blue transition-colors duration-300">{project.title}</h4>
                   <p className="font-montserrat text-sm text-slate-400 font-medium leading-relaxed flex-grow">
                     {project.desc}
@@ -299,9 +267,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* --- SECTION 4: MASSIVE CONNECT FOOTER --- */}
       <footer className="relative bg-brand-blue w-full pt-40 pb-12 overflow-hidden flex flex-col items-center border-t border-slate-800">
-        
         <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.04]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -321,7 +287,6 @@ const Home = () => {
           </h2>
         </div>
 
-        {/* Torso Profile Overlay Placement to avoid covering face */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20 w-[300px] md:w-[500px] pointer-events-none mix-blend-screen opacity-50">
            <img src={profilePhoto} alt="Srushti" className="w-full h-auto object-cover grayscale blur-[0.5px]" />
         </div>
@@ -358,11 +323,11 @@ const Home = () => {
         </div>
       </footer>
 
-      {/* --- INLINE HIGH-PERFORMANCE GPU KEYFRAMES --- */}
+      {/* FIXED: The translate must be -50% to perfectly align with a 400% wide looping layer. */}
       <style dangerouslySetInnerHTML={{__html: `
-        @keyframes earthRotate {
-          0% { background-position: 0px 0; }
-          100% { background-position: 640px 0; }
+        @keyframes earthSpin {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
         @keyframes loadingBar {
           0% { transform: translateX(-100%); }
