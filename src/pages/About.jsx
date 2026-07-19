@@ -120,7 +120,8 @@ const About = () => {
 
   useEffect(() => {
     if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      // Using block: 'nearest' prevents the entire browser window from jumping down
+      terminalEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [history]);
 

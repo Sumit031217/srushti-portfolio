@@ -154,11 +154,10 @@ const Capabilities = () => {
             <h2 className="font-poppins text-3xl md:text-4xl font-bold tracking-tight mb-4">The Innovation Ecosystem</h2>
             <p className="text-slate-500 max-w-lg mx-auto">An interconnected approach where research, design, and technology orbit a single core philosophy.</p>
           </div>
-
-          <div className="relative w-[320px] h-[320px] md:w-[600px] md:h-[600px] flex items-center justify-center my-10">
+          <div className="relative w-[280px] h-[280px] md:w-[450px] md:h-[450px] flex items-center justify-center my-10">
             
             {/* Core Node */}
-            <div className="absolute z-20 w-32 h-32 md:w-40 md:h-40 bg-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] border-2 border-brand-accent-blue/20 flex flex-col items-center justify-center">
+            <div className="absolute z-20 w-24 h-24 md:w-32 md:h-32 bg-white rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] border-2 border-brand-accent-blue/20 flex flex-col items-center justify-center">
               <span className="font-poppins font-black text-xl tracking-tighter text-brand-blue">SRUSHTI</span>
               <span className="font-mono text-[8px] uppercase tracking-widest text-brand-accent-blue mt-1">Core</span>
             </div>

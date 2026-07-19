@@ -12,6 +12,25 @@ import news6 from '../assets/news-6.png';
 import news7 from '../assets/news-7.png';
 import news8 from '../assets/news-8.png';
 
+
+import sweet1 from '../assets/sweet-1.png';
+import sweet2 from '../assets/sweet-2.png';
+import sweet3 from '../assets/sweet-3.png';
+import sweet4 from '../assets/sweet-4.png';
+
+
+import inforens1 from '../assets/inforens-1.png';
+
+
+import scottish1 from '../assets/scottish-1.png';
+import scottish2 from '../assets/scottish-2.png';
+import scottish3 from '../assets/scottish-3.png';
+import scottish4 from '../assets/scottish-4.png';
+import scottish5 from '../assets/scottish-5.png';
+import scottish6 from '../assets/scottish-6.png';
+import scottish7 from '../assets/scottish-7.mp4';
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 // --- FULL PROJECT DATA ENGINE ---
@@ -29,9 +48,9 @@ const projectData = {
       "Role: Service Designer",
       "Focus: Income protection service journey"
     ],
-    image1: { text: "[ Polished project cover image ]", caption: "A service design project focused on making income protection feel clearer, more relevant, and easier to trust." },
+    image1: { src: scottish1, caption: "A service design project focused on making income protection feel clearer, more relevant, and easier to trust." },
     brief: "The project began with a broad question around protection, but it quickly became clear that income protection carried a particular kind of tension. For many people, it sat somewhere between something important and something they had never fully seen themselves needing. The challenge was to understand what created that distance, what emotional and practical barriers shaped people’s responses, and how the experience could feel more supportive from the very beginning.",
-    image2: { text: "[ Decision visual showing all protection categories ]", microcopy: ["Starting point", "Focus area", "Why it mattered"], caption: "We began broadly, then narrowed our focus to the area that felt most relevant." },
+    image2: { src: scottish2, microcopy: ["Starting point", "Focus area", "Why it mattered"], caption: "We began broadly, then narrowed our focus to the area that felt most relevant." },
     approach: "This was a fully collaborative group project, so the work moved across the whole process together rather than through fixed individual roles. We used exploratory design methods to understand the space first, then gradually built a clearer direction through research, mapping, synthesis, and prototyping.",
     approachBullets: [
       "Explored the wider protection landscape before narrowing the focus.",
@@ -40,13 +59,13 @@ const projectData = {
       "Synthesised findings into patterns, themes, and opportunity areas.",
       "Translated insights into a redesigned website journey prototype."
     ],
-    image3: { text: "[ Process collage ]", microcopy: ["Interviews", "Survey patterns", "Stakeholder landscape"], caption: "The research helped us move from a broad financial topic to a much more human understanding." },
+    image3: { src: scottish3, microcopy: ["Interviews", "Survey patterns", "Stakeholder landscape"], caption: "The research helped us move from a broad financial topic to a much more human understanding." },
     insights: [
       "Many people did not reject income protection. They simply did not see themselves in it.",
       "Trust was shaped as much by tone and framing as by information.",
       "In financial conversations, pauses and discomfort often revealed as much as direct answers."
     ],
-    image4: { text: "[ Clean journey map ]", caption: "Journey mapping helped us see where confusion and trust gaps were shaping the experience." },
+    image4: { src: scottish4, caption: "Journey mapping helped us see where confusion and trust gaps were shaping the experience." },
     output: "The final output moved beyond insight gathering into a clearer service direction and a more human-facing prototype. Rather than simply explaining income protection better, the work aimed to make the experience feel easier to recognise, easier to trust, and easier to move through.",
     outputBullets: [
       "Research synthesis",
@@ -56,16 +75,16 @@ const projectData = {
       "Service blueprint and journey framework",
       "Redesigned website journey prototype"
     ],
-    image5: { text: "[ High-quality prototype still ]", microcopy: ["Redesigned journey", "Clarity before commitment"], caption: "The prototype translated research into a clearer website journey." },
+    image5: { src: scottish5, microcopy: ["Redesigned journey", "Clarity before commitment"], caption: "The prototype translated research into a clearer website journey." },
     outcome: "The project reframed income protection as more than a communication problem. It showed that the experience depends on whether people can recognise their own lives in the service, feel emotionally understood, and trust what they are being asked to consider.",
     outcomeBullets: [
       "Individual: Made the service feel easier to understand and act on.",
       "Organisation: Highlighted where communication could better build trust.",
       "Wider impact: Opened a more accessible way of thinking about financial protection."
     ],
-    image6: { text: "[ 3-column impact graphic ]", caption: "The project was considered through the value it could create for people and organisations." },
+    image6: { src: scottish6, caption: "The project was considered through the value it could create for people and organisations." },
     challenges: "This project came with two major constraints. The first was time. Because it was a live group project, we could not speak to as many users as we would have liked. The second was the sensitivity of the topic itself. Conversations around income and instability required a more careful and trauma-aware way of listening.",
-    image7: { text: "[ Clean split visual ]", microcopy: ["Limited access", "Sensitive topic"], caption: "The constraints shaped not only the pace, but the care needed in research." },
+    image7: { type: 'video',src: scottish7, microcopy: ["Limited access", "Sensitive topic"], caption: "The constraints shaped not only the pace, but the care needed in research." },
     reflections: "This project taught me that interviews are not only about collecting answers. They are about learning how to listen properly. Often, what matters most sits in a pause, a hesitation, or a moment of discomfort.",
     reflectionCards: [
       "How someone speaks can reveal as much as what they say.",
@@ -87,9 +106,9 @@ const projectData = {
       "Role: Service Designer",
       "Deliverable: Eight-page educational newspaper prototype"
     ],
-    image1: { text: "[ Newspaper cover or strongest opening spread. ]", caption: "An editorial learning experience designed to hold difficult history with honesty, structure, and care." },
+    image1: { src: sweet1, caption: "An editorial learning experience designed to hold difficult history with honesty, structure, and care." },
     brief: "The brief was to create a learning resource around Scottish afternoon tea for young learners, with a focus on historical power and empire. What sounded simple at first quickly opened into something much larger. The challenge was to communicate a deeply sensitive history in a way that respected young audiences, worked in real classrooms, and remained accessible to different learner needs without reducing the depth of the subject.",
-    image2: { text: "[ Visual showing the biscuit and the wider systems behind it ]", microcopy: ["One biscuit", "Six countries", "Centuries of exploitation"], caption: "What first looked like a simple object quickly opened into a much wider story of labour, trade, empire, and identity." },
+    image2: { src: sweet2, microcopy: ["One biscuit", "Six countries", "Centuries of exploitation"], caption: "What first looked like a simple object quickly opened into a much wider story of labour, trade, empire, and identity." },
     approach: "This project was shaped through stakeholder listening, concept testing, editorial decision-making, and repeated simplification. Because we could not speak directly with the end users due to ethical constraints, we relied on expert input, student reactions to existing learning formats, and careful judgment throughout the process.",
     approachBullets: [
       "Conducted site visits and listened to stakeholder presentations.",
@@ -99,13 +118,13 @@ const projectData = {
       "Rejected ideas that distracted from the history or created access barriers.",
       "Chose a newspaper format because it felt clearer, more realistic, and more respectful to the content."
     ],
-    image3: { text: "[ Stakeholder table, feedback board, or site-visit collage. ]", microcopy: ["Teachers have limited time", "Accessibility starts early", "Content must stay honest"], caption: "Stakeholder insight helped define what the resource needed to do in real classrooms, not just what sounded engaging in theory." },
+    image3: { src: sweet3, microcopy: ["Teachers have limited time", "Accessibility starts early", "Content must stay honest"], caption: "Stakeholder insight helped define what the resource needed to do in real classrooms, not just what sounded engaging in theory." },
     insights: [
       "Teenagers did not need to be over-entertained. They needed to be respected with real content.",
       "Format should support learning, not overpower it.",
       "Accessibility had to shape the resource from the beginning, not the final polish."
     ],
-    image4: { text: "[ Concept rejection board ]", caption: "Some of the strongest decisions in the project came from the ideas we chose not to pursue." },
+    image4: { src: sweet4, caption: "Some of the strongest decisions in the project came from the ideas we chose not to pursue." },
     output: "The final output was an eight-page educational newspaper where every element was deliberately structured, edited, and reviewed several times. The wording, pacing, and sequencing were shaped carefully so the experience could stay clear, sensitive, and educational without losing depth.",
     outputBullets: [
       "Eight-page newspaper prototype",
@@ -127,9 +146,7 @@ const projectData = {
       "A resource that did not rely on expensive tools or complex setup.",
       "A more respectful and accessible way of engaging with colonial history."
     ],
-    image6: { text: "[ Detail crop showing content writing, pull quotes, or reflection prompts ]", caption: "The language was shaped with care so the content could stay clear, age-appropriate, and emotionally sensitive without becoming diluted." },
     challenges: "This project had several important constraints. We could not speak directly to the end users because of ethical concerns and the sensitivity of the subject, so we had to build the work through stakeholder insight, secondary feedback, and careful interpretation. Time and budget shaped every decision too.",
-    image7: { text: "[ Simple visual block showing Accessible, Printable, Classroom-ready, and Content-led. ]", caption: "The final format worked because it respected both the sensitivity of the topic and the realities of classroom use." },
     reflections: "This project taught me that simplicity does not mean losing depth. Sometimes the most respectful design choice is the Math that removes spectacle and lets the content do the work. It also made me more aware of how budget, ethics, time, and accessibility shape what good design really looks like in practice.",
     reflectionCards: [
       "Content-led experiences can be more powerful than highly interactive ones.",
@@ -404,16 +421,26 @@ const CaseStudy = () => {
     }
     return (
       <div className="scroll-fade my-12 group">
-        <div className="w-full aspect-video bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
-          {image.src ? (
-            <img src={image.src} alt={image.text} className="w-full h-full object-contain p-4 z-10" />
+        <div className="w-full bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
+          
+          {image.type === 'video' && image.src ? (
+            <video 
+              src={image.src} 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="w-full h-auto block z-10" 
+            />
+          ) : image.src ? (
+            <img src={image.src} alt={image.text} className="w-full h-auto block z-10 object-cover m-0" />
           ) : (
-            <div className="p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
+            <div className="w-full aspect-video flex items-center justify-center p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
           )}
           {image.microcopy && (
             <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap z-20">
               {image.microcopy.map((label, idx) => (
-                <span key={idx} className="px-3 py-1.5 bg-white text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-md border border-slate-100">
+                <span key={idx} className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-sm border border-slate-100">
                   {label}
                 </span>
               ))}
@@ -436,7 +463,8 @@ const CaseStudy = () => {
       <div className="w-full pointer-events-none" style={{ height: '100px' }} aria-hidden="true"></div>
 
       {/* WATER-FILL STICKY PROGRESS BAR - NO NEGATIVE MARGIN */}
-      <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full transition-all">
+      {/* THIS IS THE LINE TO EDIT */}
+      <div className="sticky top-[75px] md:top-[60px] -mt-1 md:-mt-22 z-[8000] bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 px-6 shadow-sm w-full transition-all">
         <div className="max-w-4xl mx-auto flex gap-2 md:gap-3 h-10 md:h-12">
           {sections.map((sec, index) => {
             const sectionSpan = 100 / sections.length;

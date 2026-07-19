@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useEffect, useState } from 'react';
+import React, { useLayoutEffect, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,27 +15,9 @@ const Home = () => {
   const heroRef = useRef(null);
   const globeRef = useRef(null);
   const textSectionRef = useRef(null);
-  
-  const [loadingComplete, setLoadingComplete] = useState(false);
-
-  // --- FAST LOADER ---
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      gsap.to(".luxury-loader", {
-        opacity: 0,
-        y: -50,
-        duration: 0.8,
-        ease: "power3.inOut",
-        onComplete: () => setLoadingComplete(true)
-      });
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
 
   // --- DYNAMIC LIGHTING & MOUSE SPOTLIGHT ENGINE ---
   useEffect(() => {
-    if (!loadingComplete) return;
-
     const handleMouseMove = (e) => {
       if (!heroRef.current) return;
       const { left, top, width, height } = heroRef.current.getBoundingClientRect();
@@ -59,12 +41,10 @@ const Home = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [loadingComplete]);
+  }, []); 
 
   // --- GSAP TEXT REVEALS ---
   useLayoutEffect(() => {
-    if (!loadingComplete) return;
-
     let ctx = gsap.context(() => {
       gsap.fromTo(".char-reveal span", 
         { y: '100%', rotate: 3 }, 
@@ -92,7 +72,7 @@ const Home = () => {
 
     }, pageRef);
     return () => ctx.revert();
-  }, [loadingComplete]);
+  }, []);
 
   const projects = [
     { id: "inforens", tag: "UX Strategy", title: "Inforens", desc: "Helping a student platform feel as trustworthy as the service behind it.", image: inforensCover },
@@ -103,19 +83,6 @@ const Home = () => {
   return (
     <main ref={pageRef} className="w-full overflow-hidden bg-white text-brand-blue selection:bg-brand-accent-blue selection:text-white">
       
-      {!loadingComplete && (
-        <div className="luxury-loader fixed inset-0 z-[99999] bg-brand-blue flex flex-col items-center justify-center transition-all duration-500">
-          <div className="text-center">
-            <h2 className="font-poppins font-light text-white text-xl md:text-2xl tracking-[0.2em] mb-4 animate-pulse">
-              Initialising Srushti...
-            </h2>
-            <div className="w-48 h-[1px] bg-white/20 mx-auto overflow-hidden relative">
-              <div className="absolute top-0 left-0 h-full w-1/2 bg-brand-accent-blue animate-[loadingBar_1s_infinite_ease-in-out]"></div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <section 
         ref={heroRef}
         className="relative min-h-screen pt-32 pb-24 flex items-center overflow-hidden"
@@ -171,38 +138,38 @@ const Home = () => {
               <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-brand-accent-blue shadow-[0_0_10px_#7c3aed]"></div>
             </div>
 
-            {/* THE FLAWLESS 3D EARTH FIX: Natural colors, and exact 400% width math so the 2:1 image never stretches. */}
+            {/* THE ULTIMATE 3D EARTH: Photorealistic NASA Blue Marble, extreme deep space shading, and sun specular highlight. */}
             <div 
               ref={globeRef}
-              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full shadow-[0_20px_50px_rgba(124,58,237,0.15)] group transition-transform duration-700 overflow-hidden bg-[#000000] z-10 transform-gpu"
+              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-transform duration-700 overflow-hidden bg-[#000510] z-10 transform-gpu shadow-[0_0_80px_rgba(124,58,237,0.25)]"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              {/* 1. Heavy stationary inner shadow creates the 3D volume illusion */}
-              <div className="absolute inset-0 rounded-full shadow-[inset_-30px_-30px_50px_rgba(0,0,0,0.95),inset_10px_10px_30px_rgba(255,255,255,0.3)] z-30 pointer-events-none border border-white/10"></div>
-              
-              {/* 2. Srushti Brand Atmospheric Glow Ring */}
-              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_20px_rgba(124,58,237,0.5)] mix-blend-screen z-20 pointer-events-none"></div>
-
-              {/* 3. The Flat Map - Width is 400% to fit exactly 2 perfect 2:1 maps side-by-side. 
-                   NO hue-rotate filter so the earth stays naturally beautiful. */}
+              {/* 1. Base Map: Ultra-HD NASA Blue Marble (Hosted on a reliable developer CDN) */}
               <div 
-                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_30s_linear_infinite] z-10 pointer-events-none opacity-90"
+                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_45s_linear_infinite] z-10 pointer-events-none"
                 style={{
-                  backgroundImage: `url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg')`,
+                  backgroundImage: `url('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')`,
                   backgroundSize: '50% 100%',
                   backgroundRepeat: 'repeat-x',
+                  filter: 'saturate(1.15) contrast(1.1)'
                 }}
               ></div>
 
-              {/* 4. Clouds Layer - Spinning slightly faster for 3D parallax depth */}
+              {/* 2. Cloud Layer: Spins slightly faster for 3D parallax depth */}
               <div 
-                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_20s_linear_infinite] z-20 pointer-events-none opacity-60 mix-blend-screen"
+                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_35s_linear_infinite] z-20 pointer-events-none opacity-70 mix-blend-screen"
                 style={{
-                  backgroundImage: `url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_clouds_1024.png')`,
+                  backgroundImage: `url('https://unpkg.com/three-globe/example/img/earth-clouds1024.png')`,
                   backgroundSize: '50% 100%',
                   backgroundRepeat: 'repeat-x'
                 }}
               ></div>
+
+              {/* 3. Extreme 3D Shading: Massive black inset for the night side, bright blue/white inset for atmospheric day edge */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_-60px_-30px_80px_20px_rgba(0,0,0,0.95),inset_20px_10px_50px_10px_rgba(150,200,255,0.3)] z-30 pointer-events-none border border-white/10"></div>
+              
+              {/* 4. Specular Highlight: Mimics the sun reflecting directly off the oceans creating a true 3D glossy sphere */}
+              <div className="absolute inset-0 rounded-full z-40 pointer-events-none mix-blend-overlay" style={{ background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.65) 0%, transparent 45%)' }}></div>
             </div>
 
             <div className="absolute bottom-10 w-64 h-6 bg-slate-900/5 blur-xl rounded-full z-0 pointer-events-none"></div>
@@ -323,16 +290,10 @@ const Home = () => {
         </div>
       </footer>
 
-      {/* FIXED: The translate must be -50% to perfectly align with a 400% wide looping layer. */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes earthSpin {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
-        }
-        @keyframes loadingBar {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
         }
       `}} />
 
