@@ -421,26 +421,29 @@ const CaseStudy = () => {
     }
     return (
       <div className="scroll-fade my-12 group">
-        <div className="w-full bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center overflow-hidden relative mb-4">
+        {/* Removed flex layout to prevent the browser from squashing the video height on interaction */}
+        <div className="w-full bg-slate-50 rounded-2xl border border-slate-200 shadow-sm overflow-hidden relative mb-4 block">
           
-          {image.type === 'video' && image.src ? (
+        {image.type === 'video' && image.src ? (
             <video 
               src={image.src} 
-              autoPlay 
-              loop 
-              muted 
+              controls 
+              preload="metadata"
               playsInline 
-              className="w-full h-auto block z-10" 
+              /* Replaced h-auto with aspect-video to physically lock the height and prevent the browser collapse bug */
+              className="w-full aspect-video object-cover block z-10 relative bg-black" 
             />
           ) : image.src ? (
-            <img src={image.src} alt={image.text} className="w-full h-auto block z-10 object-cover m-0" />
+            <img src={image.src} alt={image.text} className="w-full h-auto block z-10 object-cover m-0 relative" />
           ) : (
             <div className="w-full aspect-video flex items-center justify-center p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
           )}
+          
           {image.microcopy && (
-            <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap z-20">
+            /* Moved tags to top-4 so they NEVER block the video controls */
+            <div className="absolute top-4 left-4 flex gap-2 flex-wrap z-20 pointer-events-none">
               {image.microcopy.map((label, idx) => (
-                <span key={idx} className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-sm border border-slate-100">
+                <span key={idx} className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-brand-blue text-[9px] font-bold uppercase tracking-widest rounded shadow-sm border border-slate-100 pointer-events-auto">
                   {label}
                 </span>
               ))}
