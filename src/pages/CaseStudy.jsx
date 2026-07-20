@@ -50,7 +50,12 @@ const projectData = {
     ],
     image1: { src: scottish1, caption: "A service design project focused on making income protection feel clearer, more relevant, and easier to trust." },
     brief: "The project began with a broad question around protection, but it quickly became clear that income protection carried a particular kind of tension. For many people, it sat somewhere between something important and something they had never fully seen themselves needing. The challenge was to understand what created that distance, what emotional and practical barriers shaped people’s responses, and how the experience could feel more supportive from the very beginning.",
-    image2: { src: scottish2, microcopy: ["Starting point", "Focus area", "Why it mattered"], caption: "We began broadly, then narrowed our focus to the area that felt most relevant." },
+    image2: { 
+      type: 'split', 
+      srcs: [scottish2, scottish3], // Passes both images side-by-side
+      microcopy: ["Focus area", "Stakeholder landscape"], 
+      caption: "We began broadly with sticky-note ideation, then structured our findings into a clear stakeholder landscape." 
+    },
     approach: "This was a fully collaborative group project, so the work moved across the whole process together rather than through fixed individual roles. We used exploratory design methods to understand the space first, then gradually built a clearer direction through research, mapping, synthesis, and prototyping.",
     approachBullets: [
       "Explored the wider protection landscape before narrowing the focus.",
@@ -59,13 +64,17 @@ const projectData = {
       "Synthesised findings into patterns, themes, and opportunity areas.",
       "Translated insights into a redesigned website journey prototype."
     ],
-    image3: { src: scottish3, microcopy: ["Interviews", "Survey patterns", "Stakeholder landscape"], caption: "The research helped us move from a broad financial topic to a much more human understanding." },
     insights: [
       "Many people did not reject income protection. They simply did not see themselves in it.",
       "Trust was shaped as much by tone and framing as by information.",
       "In financial conversations, pauses and discomfort often revealed as much as direct answers."
     ],
-    image4: { src: scottish4, caption: "Journey mapping helped us see where confusion and trust gaps were shaping the experience." },
+    image4: { 
+      type: 'split', 
+      srcs: [scottish4, scottish5], 
+      microcopy: ["Journey Map", "Redesigned Journey"], 
+      caption: "Journey mapping the trust gaps (left) helped us directly shape a much clearer, human-facing website prototype (right)." 
+    },
     output: "The final output moved beyond insight gathering into a clearer service direction and a more human-facing prototype. Rather than simply explaining income protection better, the work aimed to make the experience feel easier to recognise, easier to trust, and easier to move through.",
     outputBullets: [
       "Research synthesis",
@@ -75,16 +84,20 @@ const projectData = {
       "Service blueprint and journey framework",
       "Redesigned website journey prototype"
     ],
-    image5: { src: scottish5, microcopy: ["Redesigned journey", "Clarity before commitment"], caption: "The prototype translated research into a clearer website journey." },
+    /* We set image5 to null because 4 and 5 are now combined side-by-side in image4! */
+    image5: { 
+      type: 'video',
+      src: scottish7, 
+      microcopy: ["Live Demo", "Mobile Touchpoints"], 
+      caption: "The redesigned journey translates our research into a clearer, more human-facing mobile and web experience." 
+    },
     outcome: "The project reframed income protection as more than a communication problem. It showed that the experience depends on whether people can recognise their own lives in the service, feel emotionally understood, and trust what they are being asked to consider.",
     outcomeBullets: [
       "Individual: Made the service feel easier to understand and act on.",
       "Organisation: Highlighted where communication could better build trust.",
       "Wider impact: Opened a more accessible way of thinking about financial protection."
     ],
-    image6: { src: scottish6, caption: "The project was considered through the value it could create for people and organisations." },
     challenges: "This project came with two major constraints. The first was time. Because it was a live group project, we could not speak to as many users as we would have liked. The second was the sensitivity of the topic itself. Conversations around income and instability required a more careful and trauma-aware way of listening.",
-    image7: { type: 'video',src: scottish7, microcopy: ["Limited access", "Sensitive topic"], caption: "The constraints shaped not only the pace, but the care needed in research." },
     reflections: "This project taught me that interviews are not only about collecting answers. They are about learning how to listen properly. Often, what matters most sits in a pause, a hesitation, or a moment of discomfort.",
     reflectionCards: [
       "How someone speaks can reveal as much as what they say.",
@@ -424,7 +437,17 @@ const CaseStudy = () => {
         {/* Removed flex layout to prevent the browser from squashing the video height on interaction */}
         <div className="w-full bg-slate-50 rounded-2xl border border-slate-200 shadow-sm overflow-hidden relative mb-4 block">
           
-        {image.type === 'video' && image.src ? (
+        {/* NEW: Side-by-side split layout */}
+        {image.type === 'split' && image.srcs ? (
+            <div className="flex flex-col md:flex-row w-full z-10 relative bg-white overflow-hidden">
+              <div className="w-full md:w-1/2 relative border-b md:border-b-0 md:border-r border-slate-200">
+                <img src={image.srcs[0]} alt="Split left" className="w-full h-full max-h-[450px] md:max-h-[600px] object-cover m-0 block" />
+              </div>
+              <div className="w-full md:w-1/2 relative">
+                <img src={image.srcs[1]} alt="Split right" className="w-full h-full max-h-[450px] md:max-h-[600px] object-cover m-0 block" />
+              </div>
+            </div>
+          ) : image.type === 'video' && image.src ? (
             <video 
               src={image.src} 
               controls 
@@ -434,7 +457,8 @@ const CaseStudy = () => {
               className="w-full aspect-video object-cover block z-10 relative bg-black" 
             />
           ) : image.src ? (
-            <img src={image.src} alt={image.text} className="w-full h-auto block z-10 object-cover m-0 relative" />
+            /* Added max-h limits and object-contain so tall photos shrink to fit the screen elegantly without zooming in */
+            <img src={image.src} alt={image.text} className="w-full h-auto max-h-[450px] md:max-h-[600px] block z-10 object-contain mx-auto relative p-0" />
           ) : (
             <div className="w-full aspect-video flex items-center justify-center p-6 text-center z-10 text-slate-400 font-mono text-xs">{image.text}</div>
           )}

@@ -148,9 +148,9 @@ const Capabilities = () => {
           </p>
         </section>
 
-        {/* --- SECTION 2: INTERACTIVE SERVICE ECOSYSTEM (COLORED ORBITS & EXACT CAPABILITY PLANETS) --- */}
-        <section className="py-32 scroll-up relative flex flex-col items-center border-y border-slate-200/50">
-          <div className="text-center mb-20">
+       {/* --- SECTION 2: INTERACTIVE SERVICE ECOSYSTEM (COLORED ORBITS & EXACT CAPABILITY PLANETS) --- */}
+       <section className="py-16 md:py-20 scroll-up relative flex flex-col items-center border-y border-slate-200/50">
+          <div className="text-center mb-10 md:mb-12">
             <h2 className="font-poppins text-3xl md:text-4xl font-bold tracking-tight mb-4">The Innovation Ecosystem</h2>
             <p className="text-slate-500 max-w-lg mx-auto">An interconnected approach where research, design, and technology orbit a single core philosophy.</p>
           </div>
@@ -193,8 +193,8 @@ const Capabilities = () => {
           </div>
         </section>
 
-        {/* --- SECTION 3: EXACT "MOD" CAPABILITIES CARDS FROM SCREENSHOTS --- */}
-        <section className="py-32">
+       {/* --- SECTION 3: EXACT "MOD" CAPABILITIES CARDS FROM SCREENSHOTS --- */}
+       <section className="pt-16 pb-32">
           <div className="scroll-up grid grid-cols-1 md:grid-cols-2 gap-10">
             {skillCategories.map((category, idx) => (
               <div 

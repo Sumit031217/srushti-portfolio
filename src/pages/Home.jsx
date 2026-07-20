@@ -138,38 +138,30 @@ const Home = () => {
               <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-brand-accent-blue shadow-[0_0_10px_#7c3aed]"></div>
             </div>
 
-            {/* THE ULTIMATE 3D EARTH: Photorealistic NASA Blue Marble, extreme deep space shading, and sun specular highlight. */}
+            {/* THE REALISTIC EARTH: Natural colors, photorealistic clouds, and accurate 3D spherical shading. */}
             <div 
               ref={globeRef}
-              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-transform duration-700 overflow-hidden bg-[#000510] z-10 transform-gpu shadow-[0_0_80px_rgba(124,58,237,0.25)]"
+              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-transform duration-700 overflow-hidden bg-[#0a0a0a] z-10 transform-gpu shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
               style={{ transformStyle: 'preserve-3d' }}
-            >
-              {/* 1. Base Map: Ultra-HD NASA Blue Marble (Hosted on a reliable developer CDN) */}
+             >
+              {/* 1. True 3D Spherical Shading (Day/Night Terminator) */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_-50px_-30px_60px_rgba(0,0,0,0.9),inset_10px_10px_40px_rgba(255,255,255,0.4)] z-30 pointer-events-none border border-white/10"></div>
+              
+              {/* 2. Natural Earth Map (No color filters, just pure photorealism) */}
               <div 
-                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_45s_linear_infinite] z-10 pointer-events-none"
+                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_40s_linear_infinite] z-10 pointer-events-none opacity-100"
                 style={{
-                  backgroundImage: `url('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')`,
+                  backgroundImage: `url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg')`,
                   backgroundSize: '50% 100%',
                   backgroundRepeat: 'repeat-x',
-                  filter: 'saturate(1.15) contrast(1.1)'
+                  filter: 'contrast(1.1) saturate(1.1)' 
                 }}
               ></div>
 
-              {/* 2. Cloud Layer: Spins slightly faster for 3D parallax depth */}
-              <div 
-                className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_35s_linear_infinite] z-20 pointer-events-none opacity-70 mix-blend-screen"
-                style={{
-                  backgroundImage: `url('https://unpkg.com/three-globe/example/img/earth-clouds1024.png')`,
-                  backgroundSize: '50% 100%',
-                  backgroundRepeat: 'repeat-x'
-                }}
-              ></div>
+               
 
-              {/* 3. Extreme 3D Shading: Massive black inset for the night side, bright blue/white inset for atmospheric day edge */}
-              <div className="absolute inset-0 rounded-full shadow-[inset_-60px_-30px_80px_20px_rgba(0,0,0,0.95),inset_20px_10px_50px_10px_rgba(150,200,255,0.3)] z-30 pointer-events-none border border-white/10"></div>
-              
-              {/* 4. Specular Highlight: Mimics the sun reflecting directly off the oceans creating a true 3D glossy sphere */}
-              <div className="absolute inset-0 rounded-full z-40 pointer-events-none mix-blend-overlay" style={{ background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.65) 0%, transparent 45%)' }}></div>
+              {/* 4. Subtle Blue Atmospheric Edge Glow */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_20px_rgba(100,150,255,0.3)] z-40 pointer-events-none mix-blend-screen"></div>
             </div>
 
             <div className="absolute bottom-10 w-64 h-6 bg-slate-900/5 blur-xl rounded-full z-0 pointer-events-none"></div>
