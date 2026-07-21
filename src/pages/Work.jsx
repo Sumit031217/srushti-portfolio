@@ -39,22 +39,8 @@ const Work = () => {
     return () => ctx.revert();
   }, []);
 
-  // SRUSHTI'S EXACT PROJECT DATA
+  // SRUSHTI'S EXACT PROJECT DATA - REORDERED
   const projects = [
-    {
-      id: "inforens",
-      tag: "UX Strategy / Service Design",
-      title: "Inforens",
-      headline: "Helping a student platform feel as trustworthy as the service behind it.",
-      body: "A UX and service design internship project focused on making mentors, tools, community, and support more visible and believable to international students.",
-      inside: [
-        "A first-time-user audit of trust, clarity, and visibility gaps.",
-        "Website and service recommendations across key student journey stages.",
-        "A rewards system built around real student value."
-      ],
-      image: inforensCover,
-      placeholder: "[ Inforens Visual ]"
-    },
     {
       id: "scottish-widows",
       tag: "Service Design / Financial Wellbeing",
@@ -82,6 +68,20 @@ const Work = () => {
       ],
       image: sweetLiesCover,
       placeholder: "[ Sweet Lies Visual ]"
+    },
+    {
+      id: "inforens",
+      tag: "UX Strategy / Service Design",
+      title: "Inforens",
+      headline: "Helping a student platform feel as trustworthy as the service behind it.",
+      body: "A UX and service design internship project focused on making mentors, tools, community, and support more visible and believable to international students.",
+      inside: [
+        "A first-time-user audit of trust, clarity, and visibility gaps.",
+        "Website and service recommendations across key student journey stages.",
+        "A rewards system built around real student value."
+      ],
+      image: inforensCover,
+      placeholder: "[ Inforens Visual ]"
     }
   ];
 

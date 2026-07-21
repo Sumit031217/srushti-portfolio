@@ -291,15 +291,15 @@ const Capabilities = () => {
             Let's Build Something <span className="text-brand-accent-blue">Extraordinary</span> Together.
           </h2>
           
-          <Link 
-            to="/contact" 
-            className="relative overflow-hidden group bg-brand-blue text-white font-poppins font-bold uppercase tracking-widest px-10 py-5 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.3)] hover:bg-brand-accent-blue transition-all duration-500 flex items-center gap-4 hover:scale-105"
-            onMouseEnter={() => { setCursorVariant('explore'); setCursorText(''); }}
-            onMouseLeave={() => setCursorVariant('default')}
-          >
-            <span className="relative z-10">Start a Project</span>
-            <svg className="w-5 h-5 transform group-hover:rotate-45 transition-transform duration-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </Link>
+          <a 
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=srushtisachinpagariya@gmail.com" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="inline-flex items-center gap-3 bg-brand-blue text-white font-mono text-xs font-bold uppercase tracking-widest px-8 py-4 rounded-full shadow-[0_10px_30px_rgba(10,25,47,0.1)] hover:shadow-[0_15px_40px_rgba(124,58,237,0.3)] hover:bg-brand-accent-blue hover:-translate-y-1 transition-all duration-300 cursor-none group"
+            >
+              Start a Project
+              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
         </section>
 
       </div>

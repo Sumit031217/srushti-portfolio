@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,6 +15,38 @@ const Home = () => {
   const heroRef = useRef(null);
   const globeRef = useRef(null);
   const textSectionRef = useRef(null);
+  
+  // NEW: State and Ref for the Bio Modal
+  const [isBioOpen, setIsBioOpen] = useState(false);
+  const bioRef = useRef(null);
+
+  // NEW: The Poem Data with Visual Elements
+  const bioPoem = [
+    { if: "If I were a device", then: "I'd be a radio", desc: "Because I love speaking, storytelling, music, and words.", icon: "📻", color: "from-orange-400 to-amber-500" },
+    { if: "If I were a thing", then: "I'd be a mirror", desc: "Because I'm self reflective, honest with myself, and always trying to grow.", icon: "🪞", color: "from-sky-400 to-blue-500" },
+    { if: "If I were a designer", then: "I'd be sun, moon, & clouds", desc: "Because I don't want to fit into one box. I want to create all day, every day.", icon: "⛅", color: "from-yellow-400 to-orange-400" },
+    { if: "If I were a caption", then: "I'd be 6°", desc: "Because I like the kind of people and ideas that feel relatable.", icon: "❄️", color: "from-teal-300 to-emerald-400" },
+    { if: "If I were a vegetable", then: "I'd be a chilli", desc: "Not everyone can handle me. But the right people never let go.", icon: "🌶️", color: "from-red-500 to-rose-600" },
+    { if: "If I were an app", then: "I'd be Spotify", desc: "Because I want people to feel comfortable being themselves around me.", icon: "🎧", color: "from-green-400 to-emerald-500" },
+    { if: "If I were an animal", then: "I'd be a dog", desc: "Loyal, close to my people, and all in when I care.", icon: "🐕", color: "from-amber-600 to-orange-700" },
+    { if: "If I were an ornament", then: "I'd be earrings", desc: "Small, but impossible to ignore.", icon: "✨", color: "from-purple-400 to-brand-accent-blue" }
+  ];
+
+  // NEW: GSAP Animation for the Modal opening
+  useEffect(() => {
+    if (isBioOpen && bioRef.current) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling when open
+      gsap.fromTo(
+        gsap.utils.toArray('.bio-line'),
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+      );
+    } else {
+      document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [isBioOpen]);
+  
 
   // --- DYNAMIC LIGHTING & MOUSE SPOTLIGHT ENGINE ---
   useEffect(() => {
@@ -138,16 +170,17 @@ const Home = () => {
               <div className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-brand-accent-blue shadow-[0_0_10px_#7c3aed]"></div>
             </div>
 
-            {/* THE REALISTIC EARTH: Natural colors, photorealistic clouds, and accurate 3D spherical shading. */}
+            {/* THE HYPER-REALISTIC EARTH: NASA textures and atmospheric scattering (No Clouds). */}
             <div 
               ref={globeRef}
-              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-transform duration-700 overflow-hidden bg-[#0a0a0a] z-10 transform-gpu shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
-              style={{ transformStyle: 'preserve-3d' }}
+              onClick={() => setIsBioOpen(true)}
+              /* ADDED overflow-hidden BACK IN TO LOCK THE MAP INSIDE THE CIRCLE */
+              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-all duration-700 bg-black z-10 transform-gpu cursor-pointer overflow-hidden hover:scale-105 hover:shadow-[0_0_100px_rgba(124,58,237,0.4)]"
              >
               {/* 1. True 3D Spherical Shading (Day/Night Terminator) */}
               <div className="absolute inset-0 rounded-full shadow-[inset_-50px_-30px_60px_rgba(0,0,0,0.9),inset_10px_10px_40px_rgba(255,255,255,0.4)] z-30 pointer-events-none border border-white/10"></div>
               
-              {/* 2. Natural Earth Map (No color filters, just pure photorealism) */}
+              {/* 2. Natural Earth Map (No clouds!) */}
               <div 
                 className="absolute top-0 left-0 h-full w-[400%] animate-[earthSpin_40s_linear_infinite] z-10 pointer-events-none opacity-100"
                 style={{
@@ -158,9 +191,7 @@ const Home = () => {
                 }}
               ></div>
 
-               
-
-              {/* 4. Subtle Blue Atmospheric Edge Glow */}
+              {/* 3. Subtle Blue Atmospheric Edge Glow */}
               <div className="absolute inset-0 rounded-full shadow-[inset_0_0_20px_rgba(100,150,255,0.3)] z-40 pointer-events-none mix-blend-screen"></div>
             </div>
 
@@ -251,15 +282,17 @@ const Home = () => {
         </div>
 
         <div className="relative z-30 w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-16 text-center md:text-left mb-24">
-          <div className="flex flex-col items-center md:items-start gap-4">
+        <div className="flex flex-col items-center md:items-start gap-4">
             <span className="font-mono text-[10px] text-brand-accent-blue uppercase tracking-[0.2em] mb-2 font-bold">Pages</span>
-            <a href="/" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Home</a>
-            <a href="/#/work" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Work</a>
-            <a href="/#/skills" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Skills</a>
+            {/* Switched to React <Link> to fix routing issues and changed Home to About */}
+            <Link to="/about" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">About</Link>
+            <Link to="/work" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Work</Link>
+            <Link to="/skills" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Skills</Link>
           </div>
 
           <div className="flex justify-center items-end mt-24 md:mt-32 z-30">
-            <a href="mailto:your-email@example.com" className="relative overflow-hidden group bg-brand-accent-blue text-white font-poppins font-bold uppercase tracking-widest px-8 py-5 rounded-full shadow-[0_0_40px_rgba(124,58,237,0.3)] hover:shadow-[0_0_60px_rgba(124,58,237,0.6)] transition-all duration-500 flex items-center gap-4 cursor-none hover:scale-105">
+            {/* Switched to a direct Gmail web link so it works perfectly for everyone, even without a desktop mail app */}
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=srushtisachinpagariya@gmail.com" target="_blank" rel="noreferrer" className="relative overflow-hidden group bg-brand-accent-blue text-white font-poppins font-bold uppercase tracking-widest px-8 py-5 rounded-full shadow-[0_0_40px_rgba(124,58,237,0.3)] hover:shadow-[0_0_60px_rgba(124,58,237,0.6)] transition-all duration-500 flex items-center gap-4 cursor-none hover:scale-105">
               <span className="relative z-10">Let's Talk</span>
               <svg className="w-5 h-5 transform group-hover:rotate-90 transition-transform duration-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
@@ -267,9 +300,8 @@ const Home = () => {
 
           <div className="flex flex-col items-center md:items-end gap-4">
             <span className="font-mono text-[10px] text-brand-accent-blue uppercase tracking-[0.2em] mb-2 font-bold">Follow On</span>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:-translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">LinkedIn</a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:-translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Instagram</a>
-            <a href="https://readcv.com" target="_blank" rel="noreferrer" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:-translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">Read.CV</a>
+            {/* HOW TO ADD YOUR LINKEDIN: Paste your profile URL inside the href quotes below */}
+            <a href="https://www.linkedin.com/in/srushti-pagariya/" target="_blank" rel="noreferrer" className="font-poppins font-black text-white text-2xl md:text-3xl hover:text-brand-accent-blue hover:-translate-x-2 transition-all duration-300 cursor-none uppercase tracking-tight">LinkedIn</a>
           </div>
         </div>
 
@@ -288,8 +320,75 @@ const Home = () => {
           100% { transform: translateX(-50%); }
         }
       `}} />
+      {/* --- THE SECRET BIO OVERLAY --- */}
+      {isBioOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/95 backdrop-blur-xl p-6 md:p-12 overflow-y-auto">
+          
+          {/* Close Button */}
+          <button 
+            onClick={() => setIsBioOpen(false)}
+            className="absolute top-8 right-8 w-12 h-12 bg-slate-100 hover:bg-brand-accent-blue hover:text-white text-brand-blue rounded-full flex items-center justify-center transition-colors z-50 cursor-none"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+
+          <div ref={bioRef} className="max-w-3xl w-full mx-auto my-auto py-20">
+            
+            {/* Intro */}
+            <div className="bio-line mb-16 text-center">
+              <span className="inline-block px-4 py-1.5 bg-brand-accent-blue/10 border border-brand-accent-blue/20 text-brand-accent-blue text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-6">
+                Beyond The Portfolio
+              </span>
+              <p className="font-poppins text-xl md:text-3xl font-bold text-brand-blue leading-snug">
+                I was asked to define myself <br className="hidden md:block" /> without saying my name.
+              </p>
+              <p className="font-montserrat text-slate-500 mt-4 italic">So I tried this instead.</p>
+            </div>
+
+            {/* The Visual Bento Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
+              {bioPoem.map((item, idx) => (
+                <div key={idx} className="bio-line group relative overflow-hidden bg-slate-50 border border-slate-200 rounded-3xl p-8 hover:shadow-[0_20px_40px_rgba(124,58,237,0.1)] transition-all duration-500 hover:-translate-y-1 cursor-none">
+                  
+                  {/* Floating Giant Background Icon */}
+                  <div className="absolute -right-8 -bottom-8 text-8xl md:text-[9rem] opacity-[0.07] group-hover:opacity-20 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 z-0 pointer-events-none select-none">
+                    {item.icon}
+                  </div>
+
+                  {/* Soft Color Glow on Hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500 z-0`}></div>
+
+                  <div className="relative z-10">
+                    {/* Visual Badge */}
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-2xl shadow-lg shadow-slate-300 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
+                      {item.icon}
+                    </div>
+
+                    <p className="font-poppins text-lg md:text-xl text-slate-800 mb-4">
+                      <span className="font-mono text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">{item.if}</span>
+                      <span className="font-black text-brand-blue text-2xl md:text-3xl">{item.then}</span>
+                    </p>
+                    
+                    <p className="font-montserrat text-sm md:text-base text-slate-600 font-medium leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Outro */}
+            <div className="bio-line text-center pt-10 border-t border-slate-200">
+              <p className="font-poppins text-xl font-bold text-brand-blue mb-2">That's my kind of self-introduction.</p>
+              <p className="font-montserrat text-brand-accent-blue">What would you be if you had to define yourself without using your name?</p>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </main>
+
   );
 };
 
