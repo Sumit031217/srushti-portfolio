@@ -100,7 +100,8 @@ const Work = () => {
         
         {/* HEADER */}
         <div className="mb-24 md:mb-32 border-b border-slate-200/80 pb-12">
-          <h1 className="work-header-anim font-poppins text-5xl md:text-7xl font-black tracking-tighter text-brand-blue leading-tight mb-6 uppercase">
+          {/* Added text-4xl for mobile, sm:text-5xl for tablets, md:text-7xl for desktop */}
+          <h1 className="work-header-anim font-poppins text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter text-brand-blue leading-tight mb-6 uppercase break-words">
             Selected <br className="hidden md:block" /> Work<span className="text-brand-accent-blue">.</span>
           </h1>
           <p className="work-header-anim font-montserrat text-lg md:text-xl text-slate-500 font-light max-w-2xl leading-relaxed">

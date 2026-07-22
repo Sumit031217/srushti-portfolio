@@ -16,36 +16,58 @@ const Home = () => {
   const globeRef = useRef(null);
   const textSectionRef = useRef(null);
   
-  // NEW: State and Ref for the Bio Modal
+  // NEW: State for the Interactive Earth Modal
   const [isBioOpen, setIsBioOpen] = useState(false);
-  const bioRef = useRef(null);
+  const [visitorName, setVisitorName] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // NEW: The Poem Data with Visual Elements
-  const bioPoem = [
-    { if: "If I were a device", then: "I'd be a radio", desc: "Because I love speaking, storytelling, music, and words.", icon: "📻", color: "from-orange-400 to-amber-500" },
-    { if: "If I were a thing", then: "I'd be a mirror", desc: "Because I'm self reflective, honest with myself, and always trying to grow.", icon: "🪞", color: "from-sky-400 to-blue-500" },
-    { if: "If I were a designer", then: "I'd be sun, moon, & clouds", desc: "Because I don't want to fit into one box. I want to create all day, every day.", icon: "⛅", color: "from-yellow-400 to-orange-400" },
-    { if: "If I were a caption", then: "I'd be 6°", desc: "Because I like the kind of people and ideas that feel relatable.", icon: "❄️", color: "from-teal-300 to-emerald-400" },
-    { if: "If I were a vegetable", then: "I'd be a chilli", desc: "Not everyone can handle me. But the right people never let go.", icon: "🌶️", color: "from-red-500 to-rose-600" },
-    { if: "If I were an app", then: "I'd be Spotify", desc: "Because I want people to feel comfortable being themselves around me.", icon: "🎧", color: "from-green-400 to-emerald-500" },
-    { if: "If I were an animal", then: "I'd be a dog", desc: "Loyal, close to my people, and all in when I care.", icon: "🐕", color: "from-amber-600 to-orange-700" },
-    { if: "If I were an ornament", then: "I'd be earrings", desc: "Small, but impossible to ignore.", icon: "✨", color: "from-purple-400 to-brand-accent-blue" }
+  // List of global greetings to combine with the user's name
+  const globalGreetings = [
+    "Hello", "Bonjour", "Hola", "Ciao", "こんにちは", "안녕하세요", "नमस्ते", "Привет", "مرحبا",
+    "Hallo", "Olá", "Hej", "Ahoj", "Szia", "Cześć", "Γεια σας", "Merhaba", "שלום", "Sawubona",
+    "Jambo", "Sveiki", "Halò", "Kamusta", "Xin chào", "Aloha", "Kia ora", "Namaskara", "Vanakkam"
   ];
 
-  // NEW: GSAP Animation for the Modal opening
+  // Generate random positions and sizes for the names ONLY when the user submits their name
+  const floatingNames = React.useMemo(() => {
+    if (!isSubmitted || !visitorName) return [];
+    return globalGreetings.map((greet, i) => ({
+      id: i,
+      text: `${greet}, ${visitorName}`,
+      top: Math.floor(Math.random() * 85) + "%",
+      left: Math.floor(Math.random() * 85) + "%",
+      fontSize: (Math.random() * 1.5 + 1) + "rem", // Random size between 1rem and 2.5rem
+      opacity: Math.random() * 0.4 + 0.1, // Random opacity between 0.1 and 0.5
+    }));
+  }, [isSubmitted, visitorName]);
+
+  // Lock scrolling when open, and totally reset the name/form when closed
   useEffect(() => {
-    if (isBioOpen && bioRef.current) {
-      document.body.style.overflow = 'hidden'; // Prevent scrolling when open
-      gsap.fromTo(
-        gsap.utils.toArray('.bio-line'),
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
-      );
+    if (isBioOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'auto'; // Restore scrolling
+      document.body.style.overflow = 'auto';
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setVisitorName('');
+      }, 300); 
     }
     return () => { document.body.style.overflow = 'auto'; };
   }, [isBioOpen]);
+
+  // GSAP Animation: Explodes the names onto the screen when submitted
+  useEffect(() => {
+    if (isSubmitted) {
+      gsap.fromTo(".floating-name",
+        { opacity: 0, scale: 0.5, y: 20 },
+        { opacity: (i, el) => el.getAttribute('data-opacity'), scale: 1, y: 0, duration: 1.5, stagger: 0.03, ease: "back.out(1.5)" }
+      );
+      gsap.fromTo(".center-welcome",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 2, ease: "power4.out", delay: 0.5 }
+      );
+    }
+  }, [isSubmitted]);
   
 
   // --- DYNAMIC LIGHTING & MOUSE SPOTLIGHT ENGINE ---
@@ -175,7 +197,8 @@ const Home = () => {
               ref={globeRef}
               onClick={() => setIsBioOpen(true)}
               /* ADDED overflow-hidden BACK IN TO LOCK THE MAP INSIDE THE CIRCLE */
-              className="relative flex-shrink-0 aspect-square w-72 h-72 md:w-80 md:h-80 min-w-[18rem] min-h-[18rem] md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-all duration-700 bg-black z-10 transform-gpu cursor-pointer overflow-hidden hover:scale-105 hover:shadow-[0_0_100px_rgba(124,58,237,0.4)]"
+              /* Replaced strict min-widths with responsive viewport widths (vw) for mobile scaling */
+              className="relative flex-shrink-0 aspect-square w-[75vw] h-[75vw] max-w-[18rem] max-h-[18rem] md:max-w-none md:max-h-none md:w-80 md:h-80 md:min-w-[20rem] md:min-h-[20rem] rounded-full group transition-all duration-700 bg-black z-10 transform-gpu cursor-pointer overflow-hidden hover:scale-105 hover:shadow-[0_0_100px_rgba(124,58,237,0.4)]"
              >
               {/* 1. True 3D Spherical Shading (Day/Night Terminator) */}
               <div className="absolute inset-0 rounded-full shadow-[inset_-50px_-30px_60px_rgba(0,0,0,0.9),inset_10px_10px_40px_rgba(255,255,255,0.4)] z-30 pointer-events-none border border-white/10"></div>
@@ -270,7 +293,8 @@ const Home = () => {
         </div>
 
         <div className="relative z-10 w-full text-center px-6 mb-32">
-          <h2 className="font-poppins font-black text-6xl md:text-[10rem] leading-[0.85] text-white uppercase tracking-tighter">
+          {/* Stepped typography sizing from mobile to desktop, added break-words to prevent overflow */}
+          <h2 className="font-poppins font-black text-4xl sm:text-5xl md:text-[8rem] lg:text-[10rem] leading-[1.1] md:leading-[0.85] text-white uppercase tracking-tighter break-words">
             ALWAYS <br/>
             <span className="text-brand-accent-blue block mt-2">BRINGING</span>
             THE VALUE.
@@ -320,68 +344,84 @@ const Home = () => {
           100% { transform: translateX(-50%); }
         }
       `}} />
-      {/* --- THE SECRET BIO OVERLAY --- */}
+      {/* --- THE INTERACTIVE EARTH OVERLAY --- */}
       {isBioOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/95 backdrop-blur-xl p-6 md:p-12 overflow-y-auto">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#02010a]/95 backdrop-blur-xl overflow-hidden">
           
           {/* Close Button */}
           <button 
             onClick={() => setIsBioOpen(false)}
-            className="absolute top-8 right-8 w-12 h-12 bg-slate-100 hover:bg-brand-accent-blue hover:text-white text-brand-blue rounded-full flex items-center justify-center transition-colors z-50 cursor-none"
+            className="absolute top-8 right-8 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-colors z-50 cursor-none"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
 
-          <div ref={bioRef} className="max-w-3xl w-full mx-auto my-auto py-20">
+          <div className="w-full h-full flex items-center justify-center relative">
             
-            {/* Intro */}
-            <div className="bio-line mb-16 text-center">
-              <span className="inline-block px-4 py-1.5 bg-brand-accent-blue/10 border border-brand-accent-blue/20 text-brand-accent-blue text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-6">
-                Beyond The Portfolio
-              </span>
-              <p className="font-poppins text-xl md:text-3xl font-bold text-brand-blue leading-snug">
-                I was asked to define myself <br className="hidden md:block" /> without saying my name.
-              </p>
-              <p className="font-montserrat text-slate-500 mt-4 italic">So I tried this instead.</p>
-            </div>
-
-            {/* The Visual Bento Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
-              {bioPoem.map((item, idx) => (
-                <div key={idx} className="bio-line group relative overflow-hidden bg-slate-50 border border-slate-200 rounded-3xl p-8 hover:shadow-[0_20px_40px_rgba(124,58,237,0.1)] transition-all duration-500 hover:-translate-y-1 cursor-none">
-                  
-                  {/* Floating Giant Background Icon */}
-                  <div className="absolute -right-8 -bottom-8 text-8xl md:text-[9rem] opacity-[0.07] group-hover:opacity-20 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 z-0 pointer-events-none select-none">
-                    {item.icon}
+            {!isSubmitted ? (
+              /* STEP 1: The Input Screen */
+              <div className="flex flex-col items-center text-center px-6 z-10 w-full max-w-2xl">
+                <span className="inline-block px-4 py-1.5 bg-brand-accent-blue/20 text-brand-accent-blue border border-brand-accent-blue/30 text-[10px] font-mono uppercase tracking-widest font-bold rounded-full mb-8">
+                  Connection Established
+                </span>
+                <h2 className="font-poppins text-3xl md:text-5xl font-bold text-white mb-12">
+                  Who is visiting my world?
+                </h2>
+                
+                <form 
+                  onSubmit={(e) => { e.preventDefault(); if(visitorName.trim()) setIsSubmitted(true); }}
+                  className="w-full flex flex-col items-center"
+                >
+                  <input 
+                    type="text" 
+                    value={visitorName}
+                    onChange={(e) => setVisitorName(e.target.value)}
+                    placeholder="Enter your name..."
+                    className="w-full bg-transparent border-b-2 border-white/20 focus:border-brand-accent-blue text-white text-center font-poppins text-4xl md:text-6xl font-black outline-none pb-4 mb-12 placeholder:text-white/10 transition-colors"
+                    autoFocus
+                  />
+                  <button 
+                    type="submit"
+                    disabled={!visitorName.trim()}
+                    className="bg-brand-accent-blue text-white font-mono text-xs font-bold uppercase tracking-widest px-10 py-5 rounded-full hover:shadow-[0_0_40px_rgba(124,58,237,0.6)] hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-300 cursor-none"
+                  >
+                    Enter The World
+                  </button>
+                </form>
+              </div>
+            ) : (
+              /* STEP 2: The Translated Floating Names Screen */
+              <div className="absolute inset-0 w-full h-full">
+                {/* The scattered background names */}
+                {floatingNames.map((item) => (
+                  <div 
+                    key={item.id}
+                    data-opacity={item.opacity}
+                    className="floating-name absolute font-poppins font-bold text-white whitespace-nowrap select-none pointer-events-none"
+                    style={{
+                      top: item.top,
+                      left: item.left,
+                      fontSize: item.fontSize,
+                      opacity: 0 // initial opacity is 0, GSAP handles the reveal
+                    }}
+                  >
+                    {item.text}
                   </div>
+                ))}
 
-                  {/* Soft Color Glow on Hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500 z-0`}></div>
-
-                  <div className="relative z-10">
-                    {/* Visual Badge */}
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-2xl shadow-lg shadow-slate-300 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
-                      {item.icon}
-                    </div>
-
-                    <p className="font-poppins text-lg md:text-xl text-slate-800 mb-4">
-                      <span className="font-mono text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">{item.if}</span>
-                      <span className="font-black text-brand-blue text-2xl md:text-3xl">{item.then}</span>
+                {/* The glowing center message */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
+                  <div className="center-welcome bg-[#02010a]/60 backdrop-blur-md border border-white/10 px-12 py-8 rounded-3xl text-center shadow-[0_0_100px_rgba(124,58,237,0.5)]">
+                    <p className="font-mono text-sm text-brand-accent-blue uppercase tracking-[0.3em] font-bold mb-4">
+                      Welcome to Srushti's World
                     </p>
-                    
-                    <p className="font-montserrat text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-                      {item.desc}
-                    </p>
+                    <h2 className="font-poppins text-5xl md:text-7xl font-black text-white capitalize">
+                      {visitorName}
+                    </h2>
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Outro */}
-            <div className="bio-line text-center pt-10 border-t border-slate-200">
-              <p className="font-poppins text-xl font-bold text-brand-blue mb-2">That's my kind of self-introduction.</p>
-              <p className="font-montserrat text-brand-accent-blue">What would you be if you had to define yourself without using your name?</p>
-            </div>
+              </div>
+            )}
 
           </div>
         </div>
